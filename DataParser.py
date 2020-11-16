@@ -53,3 +53,26 @@ class DataParser(object):
                                 how="inner",
                                 on="item_id")
         return mapped_frame
+    
+    def get_statistics(self):
+        unique_users = self.__ratings_frame.user_id.unique()
+        unique_items = self.__ratings_frame.item_id.unique()
+        num_users, min_user_id, max_user_id = unique_users.size, unique_users.min(), unique_users.max()
+        num_items, min_item_id, max_item_id = unique_items.size, unique_items.min(), unique_items.max()
+        print(f"Users:\n{num_users=}")
+        print(f"{min_user_id=}")
+        print(f"{max_user_id=}\n")
+        print(f"Items:\n{num_items=}")
+        print(f"{min_item_id=}")
+        print(f"{max_item_id=}\n")
+        tot_ratings = self.__ratings_frame.size
+        print(f"Ratings:\n{tot_ratings=}")
+        
+        sparsity = float("{:.5f}".format(tot_ratings/(num_users * num_items)))
+        print(f"{sparsity=}")
+        users_stats = {'num':num_users, 'min':min_user_id, 'max':max_user_id}
+        items_stats = {'num':num_items, 'min':min_item_id, 'max':max_item_id}
+        ratings_stats = {'num':tot_ratings, 'sparsity':sparsity}
+        
+        return users_stats, items_stats, ratings_stats
+        
