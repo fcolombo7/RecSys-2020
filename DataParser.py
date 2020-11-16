@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import scipy.sparse as sp
 import os
 
 if __name__ == '__main__':
@@ -10,7 +11,7 @@ class DataParser(object):
     def __init__(self, directory='data'):
         self.__path_dir = directory
         self.__train_fn = 'data_train.csv'
-        self.__icm_fn = 'data_icm_title_abstract.csv'
+        self.__icm_fn = 'data_ICM_title_abstract.csv'
         self.__target_users_fn = 'data_train.csv'
         self.__load_data__()
 
@@ -75,3 +76,19 @@ class DataParser(object):
         ratings_stats = {'num':tot_ratings, 'sparsity':sparsity}
         
         return users_stats, items_stats, ratings_stats
+
+    def get_URM_all(self):
+        unique_users = self.__ratings_frame.user_id.unique()
+        unique_items = self.__ratings_frame.item_id.unique()
+        max_user_id = unique_users.max()
+        max_item_id = unique_items.max()
+        urm_all = sp.csr_matrix((self.__ratings_frame.ratings, (self.__ratings_frame.user_id,
+                                                                self.__ratings_frame.item_id)),
+                                shape=(max_user_id+1, max_item_id+1))
+        return urm_all
+
+    def get_target_data(self):
+        return pd.read_csv(os.path.join(self.__path_dir, self.__target_users_fn),
+                           header=0,
+                           names=["user_id"],
+                           dtype=[('user_id', np.int32)])
