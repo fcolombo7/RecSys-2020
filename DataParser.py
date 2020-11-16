@@ -12,7 +12,7 @@ class DataParser(object):
         self.__path_dir = directory
         self.__train_fn = 'data_train.csv'
         self.__icm_fn = 'data_ICM_title_abstract.csv'
-        self.__target_users_fn = 'data_train.csv'
+        self.__target_users_fn = 'data_target_users_test.csv'
         self.__load_data__()
 
     def __load_data__(self):
