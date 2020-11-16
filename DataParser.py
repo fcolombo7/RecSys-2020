@@ -16,17 +16,17 @@ class DataParser(object):
 
     def __load_data__(self):
         self.__ratings_frame = pd.read_csv(os.path.join(self.__path_dir, self.__train_fn),
-                                         header=0,
-                                         names=['user_id', "item_id", "ratings"],
-                                         dtype={'user_id': np.int32,
-                                                "item_id": np.int32,
-                                                "ratings": np.float32})
-        self.__icm_frame = pd.read_csv(os.path.join(self.__path_dir, self.__train_fn),
-                                     header=0,
-                                     names=['item_id', 'feature_id', 'value'],
-                                     dtype={'item_id': np.int32,
-                                            "feature_id": np.int32,
-                                            "value": np.float64})
+                                           header=0,
+                                           names=['user_id', "item_id", "ratings"],
+                                           dtype={'user_id': np.int32,
+                                                  "item_id": np.int32,
+                                                  "ratings": np.float32})
+        self.__icm_frame = pd.read_csv(os.path.join(self.__path_dir, self.__icm_fn),
+                                       header=0,
+                                       names=['item_id', 'feature_id', 'value'],
+                                       dtype={'item_id': np.int32,
+                                              "feature_id": np.int32,
+                                              "value": np.float64})
 
     def get_ratings(self):
         return self.__ratings_frame
@@ -75,4 +75,3 @@ class DataParser(object):
         ratings_stats = {'num':tot_ratings, 'sparsity':sparsity}
         
         return users_stats, items_stats, ratings_stats
-        
