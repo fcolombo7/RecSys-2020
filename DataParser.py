@@ -21,7 +21,7 @@ class DataParser(object):
                                            names=['user_id', "item_id", "ratings"],
                                            dtype={'user_id': np.int32,
                                                   "item_id": np.int32,
-                                                  "ratings": np.float32})
+                                                  "ratings": np.float64})
         self.__icm_frame = pd.read_csv(os.path.join(self.__path_dir, self.__icm_fn),
                                        header=0,
                                        names=['item_id', 'feature_id', 'value'],
@@ -60,17 +60,17 @@ class DataParser(object):
         unique_items = self.__ratings_frame.item_id.unique()
         num_users, min_user_id, max_user_id = unique_users.size, unique_users.min(), unique_users.max()
         num_items, min_item_id, max_item_id = unique_items.size, unique_items.min(), unique_items.max()
-        print(f"Users:\n{num_users=}")
-        print(f"{min_user_id=}")
-        print(f"{max_user_id=}\n")
-        print(f"Items:\n{num_items=}")
-        print(f"{min_item_id=}")
-        print(f"{max_item_id=}\n")
+        print(f"Users:\nnum_users={num_users}")
+        print(f"min_user_id={min_user_id}")
+        print(f"max_user_id={max_user_id}\n")
+        print(f"Items:\nnum_items={num_items}")
+        print(f"min_item_id={min_item_id}")
+        print(f"max_item_id={max_item_id}\n")
         tot_ratings = self.__ratings_frame.size
-        print(f"Ratings:\n{tot_ratings=}")
+        print(f"Ratings:\ntot_ratings={tot_ratings}")
         
         sparsity = float("{:.5f}".format(tot_ratings/(num_users * num_items)))
-        print(f"{sparsity=}")
+        print(f"sparsity={sparsity}")
         users_stats = {'num':num_users, 'min':min_user_id, 'max':max_user_id}
         items_stats = {'num':num_items, 'min':min_item_id, 'max':max_item_id}
         ratings_stats = {'num':tot_ratings, 'sparsity':sparsity}

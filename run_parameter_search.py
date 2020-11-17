@@ -47,7 +47,7 @@ def read_data_split_and_search():
     #dataset = dataReader.load_data()
 
     URM_all = parser.get_URM_all()
-    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage = 0.85)
+    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage = 0.80)
     URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train, train_percentage = 0.85)
 
     output_folder_path = "result_experiments/"
@@ -83,7 +83,7 @@ def read_data_split_and_search():
     runParameterSearch_Collaborative_partial = partial(runParameterSearch_Collaborative,
                                                        URM_train = URM_train,
                                                        metric_to_optimize = "MAP",
-                                                       n_cases = 40,
+                                                       n_cases = 100,
                                                        evaluator_validation_earlystopping = evaluator_validation,
                                                        evaluator_validation = evaluator_validation,
                                                        evaluator_test = evaluator_test,

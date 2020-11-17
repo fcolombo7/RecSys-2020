@@ -15,10 +15,10 @@ if __name__ == '__main__':
     # cython_file_list = glob.glob('**/*.pyx', recursive=True)
 
     subfolder_to_compile_list = [
-        "MatrixFactorization",
-        "Cython_examples",
+        #"MatrixFactorization",
+        #"Cython_examples",
         "Base/Similarity",
-        "SLIM_BPR",
+        #"SLIM_BPR",
     ]
 
 
