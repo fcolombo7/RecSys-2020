@@ -97,8 +97,8 @@ if __name__ == '__main__':
     @use_named_args(space)
     def objective(**params):
         recommender = ItemKNNCFRecommender(URM_train)
-        print(f"RUN#{run}:\n> space: [ topK={recommender.topK}, shrink={recommender.shrink} ]")
         recommender.fit(**params)
+        print(f"RUN#{run}:\n> space: [ topK={recommender.topK}, shrink={recommender.shrink} ]")
         result_dict, _ = evaluator_validation.evaluateRecommender(recommender)
         MAP = result_dict[10]['MAP']
         print(f"> result: [ MAP={MAP} ]")
