@@ -1,13 +1,20 @@
 import numpy as np
 import scipy.sparse as sp
-from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as pyplot
+
+from skopt.space import Real, Integer, Categorical
+from skopt.utils import use_named_args
+from skopt import gp_minimize
+
+from Base.Evaluation.Evaluator import EvaluatorHoldout
+from KNN.ItemKNNCFRecommender import ItemKNNCFRecommender
 
 from DataParser import DataParser
 from Base.Similarity.Compute_Similarity_Python import Compute_Similarity_Python
-import SimpleEvaluator
-seed = 1234
+from Data_manager.split_functions.split_train_validation_random_holdout import split_train_in_two_percentage_global_sample
 
+seed = 1234
+"""
 class CFItemKNN(object):
 
     def __init__(self, URM):
@@ -70,40 +77,34 @@ def dataset_splits(ratings, num_users, num_items, validation_percentage: float, 
                              shape=(num_users, num_items))
 
     return urm_train, urm_validation, urm_test
-
+"""
 
 if __name__ == '__main__':
     parser = DataParser()
+    URM_all = parser.get_URM_all()
+    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.85)
+    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train, train_percentage=0.80)
 
-    # get the ratings
-    ratings = parser.get_ratings()
-    print(ratings)
-    users_stats, items_stats, ratings_stats = parser.get_statistics()
+    evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
+    evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
-    # split them into 3 sets
-    URM_train, URM_valid, URM_test = dataset_splits(ratings, users_stats['max']+1, items_stats['max']+1, 0.15, 0.15)
+    run = 0
+    topK_values = range(100,900, 50)
+    shrink_values = range(100,900, 50)
+    space = [Categorical(categories=topK_values, name='topK'),
+             Categorical(categories=shrink_values, name='shrink')]
 
-    # testing the recommender
-    """
-    recommender = CFItemKNN(URM_train)
-    recommender.fit(shrink=0, topK=50)
-    
-    for user_id in range(10):
-        print(recommender.recommend(user_id=user_id, at=10))
-    """
-
-    x_tick = [10, 50, 100, 200, 500]
-    MAP_per_k = []
-    recommender = CFItemKNN(URM_train)
-    for topK in x_tick:
-        recommender.fit(shrink=0, topK=topK)
-
-        result_dict = SimpleEvaluator.evaluator(recommender, urm_test=URM_valid, cutoff=10)
-        MAP_per_k.append((result_dict['MAP']))
-
-    pyplot.plot(x_tick, MAP_per_k)
-    pyplot.ylabel('MAP')
-    pyplot.xlabel('TopK')
-    pyplot.show()
+    @use_named_args(space)
+    def objective(**params):
+        recommender = ItemKNNCFRecommender(URM_train)
+        print(f"RUN#{run}:\n> space: [ topK={recommender.topK}, shrink={recommender.shrink} ]")
+        recommender.fit(**params)
+        result_dict, _ = evaluator_validation.evaluateRecommender(recommender)
+        MAP = result_dict[10]['MAP']
+        print(f"> result: [ MAP={MAP} ]")
+        return -MAP
 
 
+    res_gp = gp_minimize(objective, space, n_calls=2, n_random_starts=2)
+
+    print(f"Best parameters:\n- topK: {res_gp.x[0]},\n -shrink: {res_gp.x[1]}")
