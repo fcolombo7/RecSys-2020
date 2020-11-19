@@ -88,17 +88,21 @@ def split_train_in_two_percentage_user_wise(URM_train, train_percentage = 0.1, v
 
 
 
-def split_train_in_two_percentage_global_sample(URM_all, train_percentage = 0.1):
+def split_train_in_two_percentage_global_sample(URM_all, train_percentage = 0.1, seed=None):
     """
     The function splits an URM in two matrices selecting the number of interactions globally
     :param URM_all:
     :param train_percentage:
     :param verbose:
+    :param seed:
     :return:
     """
 
     assert train_percentage >= 0.0 and train_percentage<=1.0, "train_percentage must be a value between 0.0 and 1.0, provided was '{}'".format(train_percentage)
 
+    # ----- ADDED TO MAKE EXPERIMENTS REPRODUCIBLE ------
+    if not seed is None:
+        np.random.seed(seed)
 
     from Data_manager.IncrementalSparseMatrix import IncrementalSparseMatrix
 
