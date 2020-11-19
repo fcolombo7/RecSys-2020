@@ -21,9 +21,12 @@ def create_csv(parser, recommender, name=None):
     target_data = parser.get_target_data()
     for user_id in target_data.user_id.unique():
         out_userid = np.append(out_userid, user_id)
-        str_ = re.sub(' +', ' ', np.array_str(recommender.recommend(user_id, at=10)))[1:-1]
+        recommendation = recommender.recommend(user_id, cutoff=10)
+        #print(type(recommendation))
+        str_ = re.sub(' +', ' ', np.array_str(np.array(recommendation)))[1:-1]
         if str_[0] == ' ':
             str_ = str_[1:]
+        #print(str_)
         out_itemlist = np.append(out_itemlist, str_)
 
     out_dataframe = pd.DataFrame(data={'user_id':out_userid, 'item_list':out_itemlist})
@@ -55,6 +58,8 @@ if __name__ == '__main__':
 
     parser = DataParser()
     URM_all = parser.get_URM_all()
+
+    """
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage = 0.85, seed=seed)
 
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
@@ -74,5 +79,9 @@ if __name__ == '__main__':
     result_dict, _ = evaluator_test.evaluateRecommender(recommender_slim)
     print('\nSLIMElasticNetRecommender:\n')
     print(f"MAP: {result_dict[10]['MAP']}") #MAP: 0.05416326850944763
+    
+    """
+    recommender_slim = SLIMElasticNetRecommender(URM_all)
+    recommender_slim.fit(topK=120, l1_ratio=1e-5, alpha=0.066)
 
-    #create_csv(parser, recommender, 'testCFItem')
+    create_csv(parser, recommender_slim, 'SLIM_Elasticnet')
