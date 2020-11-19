@@ -11,7 +11,7 @@ from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
 from KNN.ItemKNNCFRecommender import ItemKNNCFRecommender
 from SLIM_ElasticNet.SLIMElasticNetRecommender import SLIMElasticNetRecommender
-
+from SLIM_BPR.Cython.SLIM_BPR_Cython import SLIM_BPR_Cython
 
 def create_csv(parser, recommender, name=None):
 
@@ -65,23 +65,43 @@ if __name__ == '__main__':
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     # Define the recommenders
-    recommender_cfi = ItemKNNCFRecommender(URM_train)
-    recommender_cfi.fit(topK=967, shrink=356)
+    #recommender_cfi = ItemKNNCFRecommender(URM_train)
+    #recommender_cfi.fit(topK=967, shrink=356)
 
     #'topK': 120, 'l1_ratio': 1e-05, 'alpha': 0.066
-    recommender_slim = SLIMElasticNetRecommender(URM_train)
-    recommender_slim.fit(topK=120, l1_ratio=1e-5, alpha=0.066)
+    #recommender_slim = SLIMElasticNetRecommender(URM_train)
+    #recommender_slim.fit(topK=120, l1_ratio=1e-5, alpha=0.066)
 
-    result_dict, _ = evaluator_test.evaluateRecommender(recommender_cfi)
-    print('ItemKNNCFRecommender:\n')
-    print(f"MAP: {result_dict[10]['MAP']}") #MAP: 0.0487357913544006 , PROVE FATTE SENZA SETTARE IL SEED
+    #topK: 790, lambda_i: 0.008943099834373669, lambda_j: 1.1173145975517076e-05, learning_rate: 0.0001
+    #recommender_slim_bpr = SLIM_BPR_Cython(URM_train)
+    #recommender_slim_bpr.fit(topK=790, sgd_mode = 'sgd', epochs = 60, random_seed = seed, lambda_i = 0.008943099834373669, lambda_j = 1.1173145975517076e-05, learning_rate = 0.0001)
+
+    #topK: 1000, lambda_i: 0.01, lambda_j: 0.01, learning_rate: 0.0001
+    recommender_slim_bpr2 = SLIM_BPR_Cython(URM_train)
+    recommender_slim_bpr2.fit(topK=1000, sgd_mode = 'adam', symmetric = False, epochs = 90, random_seed = seed, lambda_i = 0.01, lambda_j = 0.01, learning_rate = 0.0001)
+
+    #result_dict, _ = evaluator_test.evaluateRecommender(recommender_cfi)
+    #print('ItemKNNCFRecommender:\n')
+    #print(f"MAP: {result_dict[10]['MAP']}") #MAP: 0.0487357913544006 , PROVE FATTE SENZA SETTARE IL SEED
+
+    #result_dict, _ = evaluator_test.evaluateRecommender(recommender_slim)
+    #print('\nSLIMElasticNetRecommender:\n')
+    #print(f"MAP: {result_dict[10]['MAP']}") #MAP: 0.05416326850944763
+
+    #result_dict, _ = evaluator_test.evaluateRecommender(recommender_slim_bpr)
+    #print('SLIM_BPR_Recommender:\n')
+    #print(f"MAP: {result_dict[10]['MAP']}") #MAP: 0.05335925676721219
 
     result_dict, _ = evaluator_test.evaluateRecommender(recommender_slim)
     print('\nSLIMElasticNetRecommender:\n')
     print(f"MAP: {result_dict[10]['MAP']}") #MAP: 0.05416326850944763
     
     """
-    recommender_slim = SLIMElasticNetRecommender(URM_all)
-    recommender_slim.fit(topK=120, l1_ratio=1e-5, alpha=0.066)
+    recommender_slim_bpr2 = SLIM_BPR_Cython(URM_all)
+    recommender_slim_bpr2.fit(topK=1000, sgd_mode = 'adam', symmetric = False, epochs = 90, random_seed = seed, lambda_i = 0.01, lambda_j = 0.01, learning_rate = 0.0001)
 
-    create_csv(parser, recommender_slim, 'SLIM_Elasticnet')
+    #result_dict, _ = evaluator_test.evaluateRecommender(recommender_slim_bpr2)
+    #print('SLIM_BPR_Recommender:\n')
+    #print(f"MAP: {result_dict[10]['MAP']}") #MAP: 0.05335925676721219
+
+    create_csv(parser, recommender_slim_bpr2, 'SLIM_BPR')
