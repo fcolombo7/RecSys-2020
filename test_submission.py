@@ -2,9 +2,15 @@ import numpy as np
 import scipy.sparse as sps
 import pandas as pd
 import re
+
+from Base.Evaluation.Evaluator import EvaluatorHoldout
 from DataParser import DataParser
-from CFItemKNN import CFItemKNN
 from datetime import datetime
+
+from Data_manager.split_functions.split_train_validation_random_holdout import \
+    split_train_in_two_percentage_global_sample
+from KNN.ItemKNNCFRecommender import ItemKNNCFRecommender
+from SLIM_ElasticNet.SLIMElasticNetRecommender import SLIMElasticNetRecommender
 
 
 def create_csv(parser, recommender, name=None):
@@ -44,10 +50,29 @@ def create_csv(parser, recommender, name=None):
 
 
 if __name__ == '__main__':
-    print("Making a submission... ")
+    #print("Making a submission... ")
+    seed = 1205
+
     parser = DataParser()
-    urm = parser.get_URM_all()
-    # Define the recommender
-    recommender = CFItemKNN(urm)
-    recommender.fit(topK=967,shrink=356)
-    create_csv(parser, recommender, 'testCFItem')
+    URM_all = parser.get_URM_all()
+    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage = 0.85, seed=seed)
+
+    evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
+
+    # Define the recommenders
+    recommender_cfi = ItemKNNCFRecommender(URM_train)
+    recommender_cfi.fit(topK=967, shrink=356)
+
+    #'topK': 120, 'l1_ratio': 1e-05, 'alpha': 0.066
+    recommender_slim = SLIMElasticNetRecommender(URM_train)
+    recommender_slim.fit(topK=120, l1_ratio=1e-5, alpha=0.066)
+
+    result_dict, _ = evaluator_test.evaluateRecommender(recommender_cfi)
+    print('ItemKNNCFRecommender:\n')
+    print(f"MAP: {result_dict[10]['MAP']}") #MAP: 0.0487357913544006 , PROVE FATTE SENZA SETTARE IL SEED
+
+    result_dict, _ = evaluator_test.evaluateRecommender(recommender_slim)
+    print('\nSLIMElasticNetRecommender:\n')
+    print(f"MAP: {result_dict[10]['MAP']}") #MAP: 0.05416326850944763
+
+    #create_csv(parser, recommender, 'testCFItem')
