@@ -16,13 +16,13 @@ class DataParser(object):
         self.__load_data__()
 
     def __load_data__(self):
-        self.__ratings_frame = pd.read_csv(os.path.join(self.__path_dir, self.__train_fn),
+        self.__ratings_frame = pd.read_csv(os.path.join(os.getcwd(), self.__path_dir, self.__train_fn),
                                            header=0,
                                            names=['user_id', "item_id", "ratings"],
                                            dtype={'user_id': np.int32,
                                                   "item_id": np.int32,
                                                   "ratings": np.float64})
-        self.__icm_frame = pd.read_csv(os.path.join(self.__path_dir, self.__icm_fn),
+        self.__icm_frame = pd.read_csv(os.path.join(os.getcwd(), self.__path_dir, self.__icm_fn),
                                        header=0,
                                        names=['item_id', 'feature_id', 'value'],
                                        dtype={'item_id': np.int32,
@@ -32,7 +32,7 @@ class DataParser(object):
     def get_ratings(self):
         return self.__ratings_frame
 
-    def get_icm(self):
+    def get_icm_frame(self):
         return self.__icm_frame
 
     def get_mapped_ratings(self):
@@ -88,7 +88,15 @@ class DataParser(object):
         return urm_all
 
     def get_target_data(self):
-        return pd.read_csv(os.path.join(self.__path_dir, self.__target_users_fn),
+        return pd.read_csv(os.path.join(os.getcwd(), self.__path_dir, self.__target_users_fn),
                            header=0,
                            names=["user_id"],
                            dtype=[('user_id', np.int32)])
+
+    def get_ICM_all(self):
+        num_features = max(self.__icm_frame.feature_id.to_list()) + 1
+        num_items = max(self.__icm_frame.item_id.to_list()) + 1
+        icm_shape = (num_items, num_features)
+        icm_all = sp.csr_matrix((self.__icm_frame.item_id.to_list(), (self.__icm_frame.item_id.to_list(), self.__icm_frame.feature_id.to_list())), shape=icm_shape)
+        return icm_all
+
