@@ -9,6 +9,7 @@ from datetime import datetime
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
+from KNN.ItemKNNCBFRecommender import ItemKNNCBFRecommender
 from KNN.ItemKNNCFRecommender import ItemKNNCFRecommender
 from SLIM_ElasticNet.SLIMElasticNetRecommender import SLIMElasticNetRecommender
 from SLIM_BPR.Cython.SLIM_BPR_Cython import SLIM_BPR_Cython
@@ -58,7 +59,10 @@ if __name__ == '__main__':
 
     parser = DataParser()
     URM_all = parser.get_URM_all()
-
+    ICM_all = parser.get_ICM_all()
+    rec1 = ItemKNNCBFRecommender(URM_all, ICM_all)
+    rec1.fit(topK=40, shrink=1000, similarity='cosine', feature_weighting='BM25')
+    create_csv(parser,rec1,'itemCBF')
     """
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage = 0.85, seed=seed)
 
@@ -96,7 +100,7 @@ if __name__ == '__main__':
     print('\nSLIMElasticNetRecommender:\n')
     print(f"MAP: {result_dict[10]['MAP']}") #MAP: 0.05416326850944763
     
-    """
+    
     recommender_slim_bpr2 = SLIM_BPR_Cython(URM_all)
     recommender_slim_bpr2.fit(topK=1000, sgd_mode = 'adam', symmetric = False, epochs = 90, random_seed = seed, lambda_i = 0.01, lambda_j = 0.01, learning_rate = 0.0001)
 
@@ -105,3 +109,4 @@ if __name__ == '__main__':
     #print(f"MAP: {result_dict[10]['MAP']}") #MAP: 0.05335925676721219
 
     create_csv(parser, recommender_slim_bpr2, 'SLIM_BPR')
+    """

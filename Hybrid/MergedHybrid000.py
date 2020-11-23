@@ -12,10 +12,9 @@ class MergedHybrid000(BaseItemSimilarityMatrixRecommender):
         self.content_W_sparse = content_recommender.W_sparse
         self.collaborative_W_sparse = collaborative_recommender.W_sparse
         self.URM_train = URM_train
+        self._URM_train_format_checked = False
+        self._W_sparse_format_checked = False
 
     def fit(self, alpha):
         self.alpha = alpha
-        m1=self.content_W_sparse.multiply(alpha)
-        m2 = self.collaborative_W_sparse.multiply((1-alpha))
-        matrix_w = m1.todense() + m2.todense()
-        self.W_sparse = check_matrix(matrix_w, format='csr')
+        self.W_sparse = self.content_W_sparse.multiply(alpha) + self.collaborative_W_sparse.multiply((1-alpha))
