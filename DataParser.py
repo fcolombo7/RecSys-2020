@@ -100,3 +100,37 @@ class DataParser(object):
         icm_all = sp.csr_matrix((self.__icm_frame.item_id.to_list(), (self.__icm_frame.item_id.to_list(), self.__icm_frame.feature_id.to_list())), shape=icm_shape)
         return icm_all
 
+    def filter_URM_test_by_range(self, URM_train, URM_test, filter_range=(0,-1)):
+        """
+        the method returns the URM_test filtered according to the number of interaction (specified) in the URM_train
+        set max = -1 to specify an unbounded range
+        """
+        assert filter_range[0] >= 0 and (filter_range[1] > filter_range[0] or filter_range[1] == -1), "Invalid filter range."
+        mat = URM_train.tocoo()
+        d = {'user_id': mat.row,
+             'item_id': mat.col,
+             'rating': mat.data}
+        frame_train = pd.DataFrame(data=d)
+        frame_train = frame_train.groupby(['user_id']).size().reset_index(name='num_inter')
+
+        mat = URM_test.tocoo()
+        d = {'user_id': mat.row,
+             'item_id': mat.col,
+             'rating': mat.data}
+        frame_test = pd.DataFrame(data=d)
+        frame_test = frame_test.join(frame_train.set_index('user_id'), on='user_id')
+        frame_test = frame_test.loc[frame_test['num_inter'] >= filter_range[0]]
+        if not filter_range[1] == -1:
+            frame_test = frame_test.loc[frame_test['num_inter'] < filter_range[1]]
+
+        assert not frame_test.empty, "There are no user in the selected range."
+
+        partial_urm_test = sp.csr_matrix((frame_test.rating, (frame_test.user_id, frame_test.item_id)),
+                                         shape=URM_train.shape)
+
+        nnz_new = len(np.where(partial_urm_test.getnnz(axis=1) > 0)[0])
+        nnz_old = len(np.where(URM_test.getnnz(axis=1) > 0)[0])
+        fraction = "{:.2f}".format( nnz_new/nnz_old)
+        print(f"Warning: the URM_test filtered in {filter_range} has {nnz_new} of {nnz_old} total users in the original URM_test. ({fraction})")
+
+        return partial_urm_test
