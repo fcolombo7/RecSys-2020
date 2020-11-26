@@ -44,20 +44,19 @@ def evaluator(recommender: object, urm_test:sp.csr_matrix, cutoff = 10):
             num_users_skipped += 1
             continue
 
-        recommendations = recommender.recommend(user_id=user_id,
-                                                at=recommendation_length,
-                                                exclude_seen=True)
+        recommendations = recommender.recommend(user_id_array=[user_id],
+                                                cutoff=recommendation_length)
 
-        accum_precision += precision(recommendations, relevant_items)
-        accum_recall += recall(recommendations, relevant_items)
-        accum_map += mean_average_precision(recommendations, relevant_items)
+        #accum_precision += precision(np.array(recommendations), relevant_items)
+        #accum_recall += recall(np.array(recommendations), relevant_items)
+        accum_map += mean_average_precision(np.array(recommendations), relevant_items)
 
         num_users_evaluated += 1
 
-    accum_precision /= max(num_users_evaluated, 1)
-    accum_recall /= max(num_users_evaluated, 1)
+    #accum_precision /= max(num_users_evaluated, 1)
+    #accum_recall /= max(num_users_evaluated, 1)
     accum_map /= max(num_users_evaluated, 1)
 
-    result_dict = {'precision': accum_precision, 'recall': accum_recall, 'MAP': accum_map}
+    result_dict = {'MAP': accum_map}
 
     return result_dict
