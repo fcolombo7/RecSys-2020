@@ -1,5 +1,6 @@
 from Base.BaseSimilarityMatrixRecommender import BaseItemSimilarityMatrixRecommender
 from Base.Evaluation.Evaluator import EvaluatorHoldout
+from Base.NonPersonalizedRecommender import TopPop
 from DataParser import DataParser
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
@@ -13,13 +14,19 @@ class PipeHybrid001(RP3betaRecommender):
     RECOMMENDER_NAME = "PipeHybrid001"
 
     def __init__(self, URM_train, ICM_train,verbose=True):
-        super(RP3betaRecommender, self).__init__(URM_train, verbose = verbose)
+        super(PipeHybrid001, self).__init__(URM_train, verbose = verbose)
         self.URM_train_recommendation = URM_train
         self.ICM_train = ICM_train
         self.__content_recommender = ItemKNNCBFRecommender(URM_train, ICM_train)
-        print("fitting ItemKNNCBF...")
-        self.__content_recommender.fit(topK=140, shrink=1000, similarity='cosine', normalize=True, feature_weighting='BM25') # best parameter up to now
-        print("... done")
+        #print("fitting ItemKNNCBF...")
+        try:
+            self.__content_recommender.load_model('stored_recommenders/ItemKNNCBFRecommender/best_at_26_10_20')
+        except:
+            self.__content_recommender.fit(topK=140, shrink=1000, similarity='cosine', normalize=True,
+                                           feature_weighting='BM25')  # best parameter up to now
+            self.__content_recommender.save_model('stored_recommenders/ItemKNNCBFRecommender/best_at_26_10_20')
+
+        #print("... done")
 
         #print(f"URM_train shape: {URM_train.shape}")
         #print(f"W_sparse knn shape: {self.__content_recommender.W_sparse.shape}")
@@ -94,6 +101,17 @@ class PipeHybrid001(RP3betaRecommender):
             user_recommendation_list = user_recommendation_list[not_inf_scores_mask]
             ranking_list[user_index] = user_recommendation_list.tolist()
 
+            #TEST
+            """
+            user_profile_array = self.URM_train[user_id_array[user_index]]
+            if np.empty(user_profile_array):
+                print(f"WARNING! {user_index} is a cold user!")
+                rec = TopPop(URM_train)
+                rec.fit()
+                ranking_list[user_index]=rec.recommend([user_id_array[user_index]], cutoff=cutoff)
+            """
+
+
         # Return single list for one user, instead of list of lists
         if single_user:
             ranking_list = ranking_list[0]
@@ -111,11 +129,16 @@ if __name__ =='__main__':
     URM_all = parser.get_URM_all()
     ICM_all = parser.get_ICM_all()
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage=0.85, seed=seed)
+
+    f_range = (0, 2)
+
+    # --------------------
+    URM_test = parser.filter_URM_test_by_range(URM_train, URM_test, f_range)
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
     recommender = PipeHybrid001(URM_train, ICM_all)
     recommender.fit(topK=946, alpha=0.47193263239089045, beta=0.0316773658685341, normalize_similarity=False)
 
-    result, _ =evaluator_test.evaluateRecommender(recommender)
+    result, _ = evaluator_test.evaluateRecommender(recommender)
     print(result)
 

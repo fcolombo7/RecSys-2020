@@ -5,6 +5,7 @@ from Data_manager.split_functions.split_train_validation_random_holdout import \
 from Hybrid.MergedHybrid000 import MergedHybrid000
 from KNN.ItemKNNCBFRecommender import ItemKNNCBFRecommender
 from SLIM_ElasticNet.SLIMElasticNetRecommender import SLIMElasticNetRecommender
+import numpy as np
 
 if __name__ == '__main__':
     seed = 1205
@@ -26,8 +27,9 @@ if __name__ == '__main__':
     rec2.fit(topK=140, l1_ratio=1e-5, alpha=0.386)
     print("recomenders are ready")
     merged_recommender = MergedHybrid000(URM_train, content_recommender=rec1, collaborative_recommender=rec2)
-    merged_recommender.fit(alpha=0.5)
-    result, _ = evaluator_test.evaluateRecommender(merged_recommender)
-    print(result[10]['MAP'])
+    for alpha in np.arange(0, 1, 0.1):
+        merged_recommender.fit(alpha)
+        result, _ = evaluator_test.evaluateRecommender(merged_recommender)
+        print(alpha, result[10]['MAP'])
 
 
