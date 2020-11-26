@@ -1,5 +1,6 @@
 result_experiments/
 result_experiments_v2/
+stored_recommenders/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
