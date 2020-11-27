@@ -2,9 +2,12 @@ from Base.BaseRecommender import BaseRecommender
 from Base.NonPersonalizedRecommender import TopPop
 from GraphBased.P3alphaRecommender import P3alphaRecommender
 from GraphBased.RP3betaRecommender import RP3betaRecommender
+from SLIM_BPR import  SLIM_BPR
 
 import numpy as np
 import os as os
+
+from SLIM_BPR.Cython.SLIM_BPR_Cython import SLIM_BPR_Cython
 
 
 class UserWiseHybrid001(BaseRecommender):
@@ -15,7 +18,7 @@ class UserWiseHybrid001(BaseRecommender):
     > [1, 25) => P3alpha (?)
     > [25, 100) => RP3beta (?)
     > [100, 200) => RP3beta (?)
-    > [200, end) => RP3beta (?)
+    > [200, end) => SLIM_BPR_Cython (?)
     """
     RECOMMENDER_NAME = "UserWiseHybrid001"
 
@@ -33,8 +36,8 @@ class UserWiseHybrid001(BaseRecommender):
              {'topK': 1000, 'alpha': 0.35039375652835403, 'beta': 0.0, 'normalize_similarity': False}),
             ((100, 200), RP3betaRecommender(URM_train),
              {'topK': 1000, 'alpha': 0.32110178834628456, 'beta': 0.0, 'normalize_similarity': True}),
-            ((200, -1), RP3betaRecommender(URM_train),
-             {'topK': 272, 'alpha': 0.4375286551430567, 'beta': 0.16773603374534, 'normalize_similarity': True}),
+            ((200, -1), SLIM_BPR_Cython(URM_train),
+             {'topK': 120, 'epochs': 20, 'symmetric': True, 'sgd_mode': 'adam', 'lambda_i': 0.01, 'lambda_j': 1e-05, 'learning_rate': 0.0001}),
         ]
         self.loaded = False
 
@@ -80,7 +83,7 @@ class UserWiseHybrid001(BaseRecommender):
             os.makedirs(model_root_folder)
 
         for f_range, recommender, _ in self.__recommender_segmentation:
-            rec_fn = f_range[0] + '-' + f_range[1] + '_' + recommender.RECOMMENDER_NAME
+            rec_fn = str(f_range[0]) + '-' + str(f_range[1]) + '_' + recommender.RECOMMENDER_NAME
             recommender.save_model(model_root_folder + '/', rec_fn)
 
     def load_model(self, folder_path, file_name=None):
@@ -89,7 +92,7 @@ class UserWiseHybrid001(BaseRecommender):
         model_root_folder = folder_path + '/' + file_name
         try:
             for f_range, recommender, _ in self.__recommender_segmentation:
-                rec_fn = f_range[0] + '-' + f_range[1] + '_' + recommender.RECOMMENDER_NAME
+                rec_fn = str(f_range[0]) + '-' + str(f_range[1]) + '_' + recommender.RECOMMENDER_NAME
                 recommender.load_model(model_root_folder + '/', rec_fn)
 
             self.loaded = True
@@ -104,7 +107,6 @@ class UserWiseHybrid001(BaseRecommender):
             for f_range, recommender, best_parameters in self.__recommender_segmentation:
                 print(f"Fitting {recommender.RECOMMENDER_NAME} [{f_range[0]} - {f_range[1]}]")
                 recommender.fit(**best_parameters)
-
 
     def __get_recommender_by_profile_length(self, user_profile_length):
         for f_range, recommender, _ in self.__recommender_segmentation:
