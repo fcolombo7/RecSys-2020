@@ -35,20 +35,38 @@
 | Slim_BPR | 0.0422478 | _'topK': 100, 'epochs': 90, 'symmetric': True, 'sgd_mode': 'adam', 'lambda_i': 0.01, 'lambda_j': 0.01, 'learning_rate': 0.0001_ | - |
 | SLIM_ElasticNet | 0.0618866 | _'topK': 585, 'l1_ratio': 0.0001006932689379397, 'alpha': 0.007119051585906447_ | - |
 
-* Range: **[25, 100)**
+
+* Range: **[50, 100)**
 
 | Algorithm | MAP | optimal parameters | notes |
 | ------ | ------| ------| ------|
-| PureSVD | 0.0239736 | _'num_factors': 228_ | - |
-| RP3beta | 0.0417560 | _'topK': 1000, 'alpha': 0.35039375652835403, 'beta': 0.0, 'normalize_similarity': False_ | - |
-| P3alpha | 0.0417541 | _'topK': 1000, 'alpha': 0.34876889668012145, 'normalize_similarity': False_ | - |
-| UserKNNCF_cosine | 0.0383413 | _'topK': 335, 'shrink': 89, 'similarity': 'cosine', 'normalize': True_ | - |
-| UserKNNCF_jaccard | 0.0410465 | _'topK': 225, 'shrink': 38, 'similarity': 'jaccard', 'normalize': False_ | - |
-| UserKNNCBF_asym | 0.0382498 | 'topK': 100, 'shrink': 563, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 1.6685411937999246 | - |
-| ItemKNNCF_cosine | 0.0375998 | _'topK': 425, 'shrink': 91, 'similarity': 'cosine', 'normalize': True_ | - |
-| ItemKNNCF_jaccard | 0.0364897 | _'topK': 535, 'shrink': 220, 'similarity': 'jaccard', 'normalize': True_ | - |
-| ItemKNNCBF_cosine | 0.0228656 | _'topK': 25, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'_ | - |
-| ItemKNNCBF_jaccard | 0.0189027 | _'topK': 70, 'shrink': 0, 'similarity': 'jaccard', 'normalize': True_ | - |
+| PureSVD | 0.0355194 | _'num_factors': 233_ | **!!!** |
+| RP3beta | 0.0429103 | _'topK': 174, 'alpha': 0.0, 'beta': 0.0, 'normalize_similarity': True_ | - |
+| P3alpha | 0.0439474 | _'topK': 469, 'alpha': 0.0, 'normalize_similarity': True_ | - |
+| UserKNNCF_cosine | 0.0477062 | _'topK': 90, 'shrink': 77, 'similarity': 'cosine', 'normalize': True_ | - |
+| UserKNNCF_jaccard | 0.0424165 | _'topK': 55, 'shrink': 0, 'similarity': 'jaccard', 'normalize': False_ | - |
+| ItemKNNCF_cosine | 0.0472611 | _'topK': 90, 'shrink': 77, 'similarity': 'cosine', 'normalize': True_ | - |
+| ItemKNNCF_jaccard | 0.0445934 | _'topK': 140, 'shrink': 337, 'similarity': 'jaccard', 'normalize': False_ | - |
+| ItemKNNCF_asym | 0.0455878 | _'topK': 90, 'shrink': 1000, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.0_ | - |
+| ItemKNNCBF_cosine | 0.0278491 | _'topK': 165, 'shrink': 95, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'none'_ | - |
+| ItemKNNCBF_jaccard | 0.0216655 | _'topK': 55, 'shrink': 0, 'similarity': 'jaccard', 'normalize': True_ | - |
+| ItemKNNCBF_tversky | 0.0358659 | _{'topK': 15, 'shrink': 0, 'similarity': 'tversky', 'normalize': True, 'tversky_alpha': 0.0, 'tversky_beta': 0.0}_ | - |
+
+* Range: **[25, 50)**
+
+| Algorithm | MAP | optimal parameters | notes |
+| ------ | ------| ------| ------|
+| PureSVD | 0.0258015 | _'num_factors': 270_ | - |
+| RP3beta | 0.0429689 | _'topK': 939, 'alpha': 0.6073516078011799, 'beta': 0.002238854541773972, 'normalize_similarity': False_ | - |
+| P3alpha | 0.0373815 | _'topK': 186, 'alpha': 0.19068246754249213, 'normalize_similarity': True_ | - |
+| UserKNNCF_asym | 0.0350267 | _'topK': 70, 'shrink': 1000, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 2.0_ | - |
+| UserKNNCF_cosine |0.0334044| _'topK': 90, 'shrink': 0, 'similarity': 'cosine', 'normalize': True_ |-|
+| UserKNNCF_jaccard | 0.0368398 | _'topK': 65, 'shrink': 0, 'similarity': 'jaccard', 'normalize': False_ | - |
+| ItemKNNCF_cosine | 0.0358939 | _'topK': 90, 'shrink': 77, 'similarity': 'cosine', 'normalize': True_ | - |
+| ItemKNNCF_jaccard | 0.0357255 | _'topK': 140, 'shrink': 337, 'similarity': 'jaccard', 'normalize': False_ | - |
+| ItemKNNCBF_cosine | 0.0205111 | _'topK': 370, 'shrink': 514, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'_ | - |
+| ItemKNNCBF_jaccard | 0.0190212 | _'topK': 105, 'shrink': 109, 'similarity': 'jaccard', 'normalize': False_ | - |
+
 
 * Range: **[0, 25)**
 
@@ -65,6 +83,24 @@
 | ItemKNNCF_asym | 0.0429509 | 'topK': 130, 'shrink': 1000, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.0 | - |
 | ItemKNNCBF_cosine | 0.0330596 | _'topK': 165, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'_ | - |
 | ItemKNNCBF_jaccard | 0.0312501 | _'topK': 65, 'shrink': 56, 'similarity': 'jaccard', 'normalize': True_ | - |
+
+
+---
+* Range: **[25, 100)** <-- **OLD!**
+
+| Algorithm | MAP | optimal parameters | notes |
+| ------ | ------| ------| ------|
+| PureSVD | 0.0239736 | _'num_factors': 228_ | - |
+| RP3beta | 0.0417560 | _'topK': 1000, 'alpha': 0.35039375652835403, 'beta': 0.0, 'normalize_similarity': False_ | - |
+| P3alpha | 0.0417541 | _'topK': 1000, 'alpha': 0.34876889668012145, 'normalize_similarity': False_ | - |
+| UserKNNCF_cosine | 0.0383413 | _'topK': 335, 'shrink': 89, 'similarity': 'cosine', 'normalize': True_ | - |
+| UserKNNCF_jaccard | 0.0410465 | _'topK': 225, 'shrink': 38, 'similarity': 'jaccard', 'normalize': False_ | - |
+| UserKNNCBF_asym | 0.0382498 | 'topK': 100, 'shrink': 563, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 1.6685411937999246 | - |
+| ItemKNNCF_cosine | 0.0375998 | _'topK': 425, 'shrink': 91, 'similarity': 'cosine', 'normalize': True_ | - |
+| ItemKNNCF_jaccard | 0.0364897 | _'topK': 535, 'shrink': 220, 'similarity': 'jaccard', 'normalize': True_ | - |
+| ItemKNNCBF_cosine | 0.0228656 | _'topK': 25, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'_ | - |
+| ItemKNNCBF_jaccard | 0.0189027 | _'topK': 70, 'shrink': 0, 'similarity': 'jaccard', 'normalize': True_ | - |
+
 
 # Progress
 
