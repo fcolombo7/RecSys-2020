@@ -9,10 +9,11 @@ from datetime import datetime
 
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
-from KNN.ItemKNNCBFRecommender import ItemKNNCBFRecommender
-from KNN.ItemKNNCFRecommender import ItemKNNCFRecommender
-from SLIM_ElasticNet.SLIMElasticNetRecommender import SLIMElasticNetRecommender
-from SLIM_BPR.Cython.SLIM_BPR_Cython import SLIM_BPR_Cython
+from Hybrid.LinearHybrid001 import LinearHybrid001
+from Hybrid.LinearHybrid002 import LinearHybrid002
+from Hybrid.MergedHybrid000 import MergedHybrid000
+from Hybrid.UserWiseHybrid001 import UserWiseHybrid001
+
 
 def create_csv(parser, recommender, name=None):
 
@@ -54,19 +55,26 @@ def create_csv(parser, recommender, name=None):
 
 
 if __name__ == '__main__':
-    #print("Making a submission... ")
-    seed = 1205
-
+    print("Making a submission... ")
     parser = DataParser()
     URM_all = parser.get_URM_all()
     ICM_all = parser.get_ICM_all()
-    rec1 = ItemKNNCBFRecommender(URM_all, ICM_all)
-    rec1.fit(topK=40, shrink=1000, similarity='cosine', feature_weighting='BM25')
-    create_csv(parser,rec1,'itemCBF')
+    recommender = LinearHybrid002(URM_all, ICM_all, submission=True)
+    best = {'alpha': 0.550021925463694, 'l1_ratio': 0.787554314369364}
+    recommender.fit(**best)
+    create_csv(parser, recommender, 'LinearHybrid002')
+
     """
+    seed = 1205
     URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage = 0.85, seed=seed)
 
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
+    recommender = MergedHybrid000(URM_train)
+    recommender.fit(alpha=0.5869641712679492, topK=194) # {'alpha': 0.5869641712679492, 'topK': 194}
+    result_dict, _ = evaluator_test.evaluateRecommender(recommender)
+    print('\nMergedHybrid000:\n')
+    print(result_dict[10])
+    """
 
     # Define the recommenders
     #recommender_cfi = ItemKNNCFRecommender(URM_train)
@@ -81,8 +89,8 @@ if __name__ == '__main__':
     #recommender_slim_bpr.fit(topK=790, sgd_mode = 'sgd', epochs = 60, random_seed = seed, lambda_i = 0.008943099834373669, lambda_j = 1.1173145975517076e-05, learning_rate = 0.0001)
 
     #topK: 1000, lambda_i: 0.01, lambda_j: 0.01, learning_rate: 0.0001
-    recommender_slim_bpr2 = SLIM_BPR_Cython(URM_train)
-    recommender_slim_bpr2.fit(topK=1000, sgd_mode = 'adam', symmetric = False, epochs = 90, random_seed = seed, lambda_i = 0.01, lambda_j = 0.01, learning_rate = 0.0001)
+    #recommender_slim_bpr2 = SLIM_BPR_Cython(URM_train)
+    #recommender_slim_bpr2.fit(topK=1000, sgd_mode = 'adam', symmetric = False, epochs = 90, random_seed = seed, lambda_i = 0.01, lambda_j = 0.01, learning_rate = 0.0001)
 
     #result_dict, _ = evaluator_test.evaluateRecommender(recommender_cfi)
     #print('ItemKNNCFRecommender:\n')
@@ -96,10 +104,11 @@ if __name__ == '__main__':
     #print('SLIM_BPR_Recommender:\n')
     #print(f"MAP: {result_dict[10]['MAP']}") #MAP: 0.05335925676721219
 
-    result_dict, _ = evaluator_test.evaluateRecommender(recommender_slim)
-    print('\nSLIMElasticNetRecommender:\n')
-    print(f"MAP: {result_dict[10]['MAP']}") #MAP: 0.05416326850944763
-    
+    #result_dict, _ = evaluator_test.evaluateRecommender(recommender_slim)
+    #print('\nSLIMElasticNetRecommender:\n')
+    #print(f"MAP: {result_dict[10]['MAP']}") #MAP: 0.05416326850944763
+
+    """
     
     recommender_slim_bpr2 = SLIM_BPR_Cython(URM_all)
     recommender_slim_bpr2.fit(topK=1000, sgd_mode = 'adam', symmetric = False, epochs = 90, random_seed = seed, lambda_i = 0.01, lambda_j = 0.01, learning_rate = 0.0001)

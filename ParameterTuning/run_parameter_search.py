@@ -13,9 +13,14 @@ Created on 22/11/17
 ##########                  PURE COLLABORATIVE              ##########
 ##########                                                  ##########
 ######################################################################
+import numpy as np
 from Base.NonPersonalizedRecommender import TopPop, Random, GlobalEffects
 
 # KNN
+from Hybrid.LinearHybrid002 import LinearHybrid002
+from Hybrid.LinearHybrid001 import LinearHybrid001
+from Hybrid.MergedHybrid000 import MergedHybrid000
+from Hybrid.PipeHybrid001 import PipeHybrid001
 from KNN.UserKNNCFRecommender import UserKNNCFRecommender
 from KNN.ItemKNNCFRecommender import ItemKNNCFRecommender
 from GraphBased.P3alphaRecommender import P3alphaRecommender
@@ -23,11 +28,12 @@ from GraphBased.RP3betaRecommender import RP3betaRecommender
 from EASE_R.EASE_R_Recommender import EASE_R_Recommender
 
 # KNN machine learning
+#from MatrixFactorization.PyTorch.MF_MSE_PyTorch import MF_MSE_PyTorch
 from SLIM_BPR.Cython.SLIM_BPR_Cython import SLIM_BPR_Cython
 from SLIM_ElasticNet.SLIMElasticNetRecommender import SLIMElasticNetRecommender
 
 # Matrix Factorization
-from MatrixFactorization.PureSVDRecommender import PureSVDRecommender
+from MatrixFactorization.PureSVDRecommender import PureSVDRecommender, PureSVDItemRecommender
 from MatrixFactorization.IALSRecommender import IALSRecommender
 from MatrixFactorization.NMFRecommender import NMFRecommender
 from MatrixFactorization.Cython.MatrixFactorization_Cython import MatrixFactorization_BPR_Cython,\
@@ -76,7 +82,7 @@ def run_KNNRecommender_on_similarity_type(similarity_type, parameterSearch,
     original_parameter_search_space = parameter_search_space
 
     hyperparameters_range_dictionary = {}
-    hyperparameters_range_dictionary["topK"] = Integer(5, 1000)
+    hyperparameters_range_dictionary["topK"] = Categorical(range(5,900,5)) #Integer(5, 1000)
     hyperparameters_range_dictionary["shrink"] = Integer(0, 1000)
     hyperparameters_range_dictionary["similarity"] = Categorical([similarity_type])
     hyperparameters_range_dictionary["normalize"] = Categorical([True, False])
@@ -202,10 +208,10 @@ def runParameterSearch_Content(recommender_class, URM_train, ICM_object, ICM_nam
 
 
 
-def runParameterSearch_Collaborative(recommender_class, URM_train, URM_train_last_test = None, metric_to_optimize = "PRECISION",
+def runParameterSearch_Collaborative(recommender_class, URM_train, ICM_train=None, URM_train_last_test = None, metric_to_optimize = "PRECISION",
                                      evaluator_validation = None, evaluator_test = None, evaluator_validation_earlystopping = None,
                                      output_folder_path ="result_experiments/", parallelizeKNN = True,
-                                     n_cases = 35, n_random_starts = 5, resume_from_saved = False, save_model = "best",
+                                     n_cases = 35, n_random_starts = 50, resume_from_saved = False, save_model = "best",
                                      allow_weighting = True,
                                      similarity_type_list = None):
 
@@ -275,7 +281,7 @@ def runParameterSearch_Collaborative(recommender_class, URM_train, URM_train_las
 
         ##########################################################################################################
 
-        if recommender_class in [ItemKNNCFRecommender, UserKNNCFRecommender]:
+        if recommender_class in [ItemKNNCFRecommender, UserKNNCFRecommender, ItemKNNCBFRecommender]:
 
             if similarity_type_list is None:
                 similarity_type_list = ['cosine', 'jaccard', "asymmetric", "dice", "tversky"]
@@ -362,21 +368,62 @@ def runParameterSearch_Collaborative(recommender_class, URM_train, URM_train_las
                 FIT_KEYWORD_ARGS = {}
             )
 
+        ##########################################################################################################
 
+        if recommender_class in [LinearHybrid001, LinearHybrid002]:
+            hyperparameters_range_dictionary = {}
+            hyperparameters_range_dictionary["alpha"] = Real(low=0, high=1, prior='uniform')
+            hyperparameters_range_dictionary["l1_ratio"] = Real(low=0, high=1, prior='uniform')
+
+            recommender_input_args = SearchInputRecommenderArgs(
+                CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, ICM_train],
+                CONSTRUCTOR_KEYWORD_ARGS={},
+                FIT_POSITIONAL_ARGS=[],
+                FIT_KEYWORD_ARGS={}
+            )
+
+        ##########################################################################################################
+        if recommender_class is PipeHybrid001:
+            hyperparameters_range_dictionary = {}
+            hyperparameters_range_dictionary["topK"] = Integer(5, 1000)
+            hyperparameters_range_dictionary["alpha"] = Real(low=0, high=2, prior='uniform')
+            hyperparameters_range_dictionary["beta"] = Real(low=0, high=2, prior='uniform')
+            hyperparameters_range_dictionary["normalize_similarity"] = Categorical([True, False])
+
+            recommender_input_args = SearchInputRecommenderArgs(
+                CONSTRUCTOR_POSITIONAL_ARGS=[URM_train, ICM_train],
+                CONSTRUCTOR_KEYWORD_ARGS={},
+                FIT_POSITIONAL_ARGS=[],
+                FIT_KEYWORD_ARGS={}
+            )
+
+        ##########################################################################################################
+
+        if recommender_class is MergedHybrid000:
+            hyperparameters_range_dictionary = {}
+            hyperparameters_range_dictionary["alpha"] = Real(low=0, high=1, prior='uniform')
+            hyperparameters_range_dictionary["topK"] = Integer(5, 1000)
+
+            recommender_input_args = SearchInputRecommenderArgs(
+                CONSTRUCTOR_POSITIONAL_ARGS=[URM_train],
+                CONSTRUCTOR_KEYWORD_ARGS={},
+                FIT_POSITIONAL_ARGS=[],
+                FIT_KEYWORD_ARGS={}
+            )
 
         ##########################################################################################################
 
         if recommender_class is MatrixFactorization_FunkSVD_Cython:
 
             hyperparameters_range_dictionary = {}
-            hyperparameters_range_dictionary["sgd_mode"] = Categorical(["sgd", "adagrad", "adam"])
-            hyperparameters_range_dictionary["epochs"] = Categorical([500])
-            hyperparameters_range_dictionary["use_bias"] = Categorical([True, False])
-            hyperparameters_range_dictionary["batch_size"] = Categorical([1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024])
-            hyperparameters_range_dictionary["num_factors"] = Integer(1, 200)
+            hyperparameters_range_dictionary["sgd_mode"] = Categorical(["adam"]) # Categorical(["sgd", "adagrad", "adam"])
+            hyperparameters_range_dictionary["epochs"] = Categorical([400]) # Changed! default = 500
+            #hyperparameters_range_dictionary["use_bias"] = Categorical([True, False])
+            #hyperparameters_range_dictionary["batch_size"] = Categorical([1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024])
+            hyperparameters_range_dictionary["num_factors"] = Integer(160, 210) # Integer(1, 200)
             hyperparameters_range_dictionary["item_reg"] = Real(low = 1e-5, high = 1e-2, prior = 'log-uniform')
             hyperparameters_range_dictionary["user_reg"] = Real(low = 1e-5, high = 1e-2, prior = 'log-uniform')
-            hyperparameters_range_dictionary["learning_rate"] = Real(low = 1e-4, high = 1e-1, prior = 'log-uniform')
+            #hyperparameters_range_dictionary["learning_rate"] = Real(low = 1e-4, high = 1e-1, prior = 'log-uniform')
             hyperparameters_range_dictionary["negative_interactions_quota"] = Real(low = 0.0, high = 0.5, prior = 'uniform')
 
             recommender_input_args = SearchInputRecommenderArgs(
@@ -447,13 +494,12 @@ def runParameterSearch_Collaborative(recommender_class, URM_train, URM_train_las
                 FIT_KEYWORD_ARGS = earlystopping_keywargs
             )
 
-
         ##########################################################################################################
 
-        if recommender_class is PureSVDRecommender:
+        if recommender_class in [PureSVDRecommender, PureSVDItemRecommender]:
 
             hyperparameters_range_dictionary = {}
-            hyperparameters_range_dictionary["num_factors"] = Integer(1, 350)
+            hyperparameters_range_dictionary["num_factors"] = Integer(1, 500)
 
             recommender_input_args = SearchInputRecommenderArgs(
                 CONSTRUCTOR_POSITIONAL_ARGS = [URM_train],
@@ -469,7 +515,7 @@ def runParameterSearch_Collaborative(recommender_class, URM_train, URM_train_las
 
             hyperparameters_range_dictionary = {}
             hyperparameters_range_dictionary["num_factors"] = Integer(1, 350)
-            hyperparameters_range_dictionary["solver"] = Categorical(["coordinate_descent", "multiplicative_update"])
+            hyperparameters_range_dictionary["solver"] = Categorical(["multiplicative_update"]) # , "coordinate_descent"])
             hyperparameters_range_dictionary["init_type"] = Categorical(["random", "nndsvda"])
             hyperparameters_range_dictionary["beta_loss"] = Categorical(["frobenius", "kullback-leibler"])
 
@@ -687,6 +733,4 @@ def read_data_split_and_search():
 
 
 if __name__ == '__main__':
-
-
     read_data_split_and_search()
