@@ -51,6 +51,7 @@
 | ItemKNNCBF_cosine | 0.0278491 | _'topK': 165, 'shrink': 95, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'none'_ | - |
 | ItemKNNCBF_jaccard | 0.0216655 | _'topK': 55, 'shrink': 0, 'similarity': 'jaccard', 'normalize': True_ | - |
 | ItemKNNCBF_tversky | 0.0358659 | _{'topK': 15, 'shrink': 0, 'similarity': 'tversky', 'normalize': True, 'tversky_alpha': 0.0, 'tversky_beta': 0.0}_ | - |
+| Slim_BPR | 0.0465718 | _'topK': 120, 'epochs': 110, 'symmetric': True, 'sgd_mode': 'adam', 'lambda_i': 1e-05, 'lambda_j': 1e-05, 'learning_rate': 0.0001_ | - |
 
 * Range: **[25, 50)**
 
@@ -66,7 +67,7 @@
 | ItemKNNCF_jaccard | 0.0357255 | _'topK': 140, 'shrink': 337, 'similarity': 'jaccard', 'normalize': False_ | - |
 | ItemKNNCBF_cosine | 0.0205111 | _'topK': 370, 'shrink': 514, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'_ | - |
 | ItemKNNCBF_jaccard | 0.0190212 | _'topK': 105, 'shrink': 109, 'similarity': 'jaccard', 'normalize': False_ | - |
-
+| Slim_BPR | 0.0345580 | _'topK': 420, 'epochs': 85, 'symmetric': True, 'sgd_mode': 'adam', 'lambda_i': 1e-05, 'lambda_j': 1e-05, 'learning_rate': 0.0001_ | - |
 
 * Range: **[0, 25)**
 
@@ -83,7 +84,7 @@
 | ItemKNNCF_asym | 0.0429509 | 'topK': 130, 'shrink': 1000, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.0 | - |
 | ItemKNNCBF_cosine | 0.0330596 | _'topK': 165, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'_ | - |
 | ItemKNNCBF_jaccard | 0.0312501 | _'topK': 65, 'shrink': 56, 'similarity': 'jaccard', 'normalize': True_ | - |
-
+| Slim_BPR | 0.0461873 | _'topK': 1100, 'epochs': 135, 'symmetric': False, 'sgd_mode': 'adam', 'lambda_i': 0.0038059348762991855, 'lambda_j': 0.00039157722122128087, 'learning_rate': 0.0001_ | - |
 
 ---
 * Range: **[25, 100)** <-- **OLD!**
