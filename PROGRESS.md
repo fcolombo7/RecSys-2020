@@ -23,12 +23,25 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 | UserKNNCF_asym | 0.0384820 | {'topK': 285, 'shrink': 392, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 1.7165427482216917}
 | UserKNNCF_cosine | 0.0399308 | {'topK': 190, 'shrink': 0, 'similarity': 'cosine', 'normalize': True}
 | UserKNNCF_jaccard | 0.0384524 | {'topK': 190, 'shrink': 0, 'similarity': 'cosine', 'normalize': True}
-| RP3Beta |  |
-| P3alpha |  |
+| RP3Beta | 0.0406500 | {'topK': 1000, 'alpha': 0.38192761611274967, 'beta': 0.0, 'normalize_similarity': False}
+| P3alpha | 0.0415311 | {'topK': 131, 'alpha': 0.33660811631883863, 'normalize_similarity': False}
 | SLIM_ElasticNet |  |
-| Slim_BPR |  |
+| Slim_BPR | 0.0349263 | {'topK': 979, 'epochs': 130, 'symmetric': False, 'sgd_mode': 'adam', 'lambda_i': 0.004947329669424629, 'lambda_j': 1.1534760845071758e-05, 'learning_rate': 0.0001}
 
+##Combo performance
 
+| Combined Recs | MAP on **validation_hybrid** | optimal parameters |
+| ------ | ------| ------|
+| ItemKNNCF, UserKNNCF, ItemKNNCBF| 0.0659249 | 'alpha': 0.767469300493861, 'l1_ratio': 0.7325725081659069
+| P3alpha, ItemKNNCF, ItemKNNCBF| 0.0677491 | 'alpha': 0.4066665999396494, 'l1_ratio': 0.7594645794234393
+| P3alpha, ItemKNNCF, UserKNNCF| 0.0542544 | 'alpha': 0.5630173292967398, 'l1_ratio': 0.92733589638295
+| P3alpha, UserKNNCF, ItemKNNCBF| 0.0681188 | 'alpha': 0.37776131907747645, 'l1_ratio': 0.44018901104481
+| RP3Beta, ItemKNNCF, ItemKNNCBF| 0.0671482 | 'alpha': 0.40426999639005445, 'l1_ratio': 1.0
+| RP3Beta, ItemKNNCF, UserKNNCF| 0.0533618 | 'alpha': 0.7416313012430469, 'l1_ratio': 0.8122593875086325
+| RP3Beta, P3alpha, ItemKNNCBF| 0.0677085 | 'alpha': 0.3553383791480798, 'l1_ratio': 0.000435281815357902
+| RP3Beta, P3alpha, ItemKNNCF| 0.0535307 | 'alpha': 0.367698407319822, 'l1_ratio': 0.5878133798647788
+| RP3Beta, P3alpha, UserKNNCF| 0.0541693 | 'alpha': 0.6405838432360388, 'l1_ratio': 0.4188312253799342
+| RP3Beta, UserKNNCF, ItemKNNCBF| 0.0680765 | 'alpha': 0.4648716125499346, 'l1_ratio': 0.292302921903516
 
 
 ---
