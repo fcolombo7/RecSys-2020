@@ -1,3 +1,38 @@
+# New setup
+```
+seed = 1205
+# SPLIT TO GET TEST PARTITION
+URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage = 0.90, seed=seed)
+
+# SPLIT TO GET THE HYBRID VALID PARTITION
+URM_train, URM_valid_hybrid = split_train_in_two_percentage_global_sample(URM_train, train_percentage = 0.85, seed=seed)
+
+# SPLIT TO GET THE sub_rec VALID PARTITION
+URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train, train_percentage=0.85, seed=seed)
+```
+## Sub-recommenders performance
+
+| Algorithm | MAP on **validation_sub** | optimal parameters |
+| ------ | ------| ------|
+| ItemKNNCBF_asym | 0.0299853 | {'topK': 545, 'shrink': 790, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.3706399568074206, 'feature_weighting': 'BM25'}
+| ItemKNNCBF_cosine | 0.0306796 | {'topK': 205, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'}
+| ItemKNNCBF_jaccard | 0.0266469 | {'topK': 105, 'shrink': 82, 'similarity': 'jaccard', 'normalize': True}
+| ItemKNNCF_asym | 0.0353139 | {'topK': 55, 'shrink': 1000, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.0}
+| ItemKNNCF_cosine | 0.0350612 | {'topK': 655, 'shrink': 130, 'similarity': 'cosine', 'normalize': True}
+| ItemKNNCF_jaccard | 0.0350433 | {'topK': 460, 'shrink': 234, 'similarity': 'jaccard', 'normalize': False}
+| UserKNNCF_asym | 0.0384820 | {'topK': 285, 'shrink': 392, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 1.7165427482216917}
+| UserKNNCF_cosine | 0.0399308 | {'topK': 190, 'shrink': 0, 'similarity': 'cosine', 'normalize': True}
+| UserKNNCF_jaccard | 0.0384524 | {'topK': 190, 'shrink': 0, 'similarity': 'cosine', 'normalize': True}
+| RP3Beta |  |
+| P3alpha |  |
+| SLIM_ElasticNet |  |
+| Slim_BPR |  |
+
+
+
+
+---
+---
 # User segmentation
 * Range: **[200, end)**
 
