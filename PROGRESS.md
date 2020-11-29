@@ -25,7 +25,7 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 | UserKNNCF_jaccard | 0.0384524 | {'topK': 190, 'shrink': 0, 'similarity': 'cosine', 'normalize': True}
 | RP3Beta | 0.0406500 | {'topK': 1000, 'alpha': 0.38192761611274967, 'beta': 0.0, 'normalize_similarity': False}
 | P3alpha | 0.0415311 | {'topK': 131, 'alpha': 0.33660811631883863, 'normalize_similarity': False}
-| SLIM_ElasticNet |  |
+| SLIM_ElasticNet | 0.0380146 | {'topK': 992, 'l1_ratio': 0.004065081925341167, 'alpha': 0.003725005053334143}
 | Slim_BPR | 0.0349263 | {'topK': 979, 'epochs': 130, 'symmetric': False, 'sgd_mode': 'adam', 'lambda_i': 0.004947329669424629, 'lambda_j': 1.1534760845071758e-05, 'learning_rate': 0.0001}
 
 ##Combo performance
@@ -42,6 +42,14 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 | RP3Beta, P3alpha, ItemKNNCF| 0.0535307 | 'alpha': 0.367698407319822, 'l1_ratio': 0.5878133798647788
 | RP3Beta, P3alpha, UserKNNCF| 0.0541693 | 'alpha': 0.6405838432360388, 'l1_ratio': 0.4188312253799342
 | RP3Beta, UserKNNCF, ItemKNNCBF| 0.0680765 | 'alpha': 0.4648716125499346, 'l1_ratio': 0.292302921903516
+
+## New Segmentation
+* Range: **[0, 3)** //users with 1 or 2 interactions
+
+| Algorithm | MAP | optimal parameters | Notes|
+| ------ | ------| ------| ----|
+| PureSVD* | 0.0217047 | {'num_factors': 500} | configurazione al limite |
+| SLIM_Elasticnet* | 0.0329999 | {'topK': 954, 'l1_ratio': 3.87446082207643e-05, 'alpha': 0.07562657698792305} | non ancora finito |
 
 
 ---
