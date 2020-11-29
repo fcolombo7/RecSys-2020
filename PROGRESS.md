@@ -46,6 +46,10 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 | P3alpha, ItemKNNCBF, SLIM_EN | 0.0676024 | 'alpha': 1.0, 'l1_ratio': 0.38257019222950617
 | RP3beta, ItemKNNCBF, SLMI_EN | 0.0669610 | {'alpha': 0.9986952651067782, 'l1_ratio': 0.40273040559834994}
 | UserKNNCF, ItemKNNCBF, SLIM_EN | 0.0668025 | {'alpha': 0.4960538848298478, 'l1_ratio': 0.3805091314133038}
+| P3alpha, ItemKNNCBF, SLIM_BPR | 0.0681493 | 'alpha':0.5521014101582482, 'l1_ratio': 0.33884991586467056
+| RP3beta, ItemKNNCBF, SLMI_BPR | 0.0676888 | {'alpha': 0.3592184105265153, 'l1_ratio': 0.2874563071761684}
+| UserKNNCF, ItemKNNCBF, SLIM_BPR | 0.0666102 | {'alpha': 0.36976685355295563, 'l1_ratio': 0.46692198040584476}
+| ItemKNNCBF, SLIM_EN, SLIM_BPR | 0.0667062 | {'alpha': 0.9651828293963296, 'l1_ratio': 0.14049121822460078}
 
 ## New Segmentation
 * Range: **[0, 3)** //users with 1 or 2 interactions
