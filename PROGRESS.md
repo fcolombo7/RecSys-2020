@@ -48,8 +48,8 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 
 | Algorithm | MAP | optimal parameters | Notes|
 | ------ | ------| ------| ----|
-| PureSVD* | 0.0217047 | {'num_factors': 500} | configurazione al limite |
-| SLIM_Elasticnet* | 0.0329999 | {'topK': 954, 'l1_ratio': 3.87446082207643e-05, 'alpha': 0.07562657698792305} | non ancora finito |
+| PureSVD | 0.0252548 | {'num_factors': 711} | configurazione al limite |
+| SLIM_Elasticnet | 0.0329999 | {'topK': 954, 'l1_ratio': 3.87446082207643e-05, 'alpha': 0.07562657698792305} | - |
 | Slim_BPR | 0.0288176 | {'topK': 1000, 'epochs': 45, 'symmetric': False, 'sgd_mode': 'sgd', 'lambda_i': 0.01, 'lambda_j': 1e-05, 'learning_rate': 0.0001} | - |
 | IALS | 0.0397605 | {'num_factors': 83, 'confidence_scaling': 'linear', 'alpha': 28.4278070726612, 'epsilon': 1.0234211788885077, 'reg': 0.0027328110246575004, 'epochs': 20} | non ancora finito |
 
