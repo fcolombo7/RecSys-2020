@@ -144,35 +144,48 @@ def read_data_split_and_search():
     icb_params = {'topK': 205, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'}
     icb.fit(**icb_params)
     print("Done")
+    print("SlimBPR training...")
+    sbpr = SLIM_BPR_Cython(URM_train, verbose=False)
+    sbpr_params = {'topK': 979, 'epochs': 130, 'symmetric': False, 'sgd_mode': 'adam', 'lambda_i': 0.004947329669424629, 'lambda_j': 1.1534760845071758e-05, 'learning_rate': 0.0001}
+    sbpr.fit(**sbpr_params)
+    print("Done")
+    print("SlimElasticNet training...")
+    sen = SLIMElasticNetRecommender(URM_train, verbose=False)
+    sen_params = {'topK': 992, 'l1_ratio': 0.004065081925341167, 'alpha': 0.003725005053334143}
+    sen.fit(**sen_params)
+    print("Done")
     
-    list_recommender = [rp3b, p3a, icf, ucf, icb]
+    list_recommender = [rp3b, p3a, icf, ucf, icb, sen, sbpr]
+    list_already_seen = [rp3b, p3a, icf, ucf, icb]
     
     for rec_perm in combinations(list_recommender, 3):
         
-        recommender_names = '_'.join([r.RECOMMENDER_NAME for r in rec_perm])
-        output_folder_path = "result_experiments_v3/seed_"+str(seed)+'/'+recommender_names+'/'
+        if rec_perm not in combinations(list_already_seen, 3):
+        
+            recommender_names = '_'.join([r.RECOMMENDER_NAME for r in rec_perm])
+            output_folder_path = "result_experiments_v3/seed_"+str(seed)+'/'+recommender_names+'/'
 
-        # If directory does not exist, create
-        if not os.path.exists(output_folder_path):
-            os.makedirs(output_folder_path)
-    
-        # TODO: setta I GIUSTI EVALUATOR QUI!!!!
-        runParameterSearch_Collaborative_partial = partial(runParameterSearch_Collaborative,
-                                                           URM_train = URM_train,
-                                                           ICM_train = ICM_obj,
-                                                           metric_to_optimize = "MAP",
-                                                           n_cases = 50,
-                                                           n_random_starts = 20,
-                                                           evaluator_validation_earlystopping = evaluator_valid_hybrid,
-                                                           evaluator_validation = evaluator_valid_hybrid,
-                                                           evaluator_test = evaluator_test,
-                                                           output_folder_path = output_folder_path,
-                                                           allow_weighting = False,
-                                                           #similarity_type_list = ["cosine", 'jaccard'],
-                                                           parallelizeKNN = False,
-                                                           list_rec = rec_perm)
-        pool = multiprocessing.Pool(processes=int(multiprocessing.cpu_count()), maxtasksperchild=1)
-        pool.map(runParameterSearch_Collaborative_partial, collaborative_algorithm_list)
+            # If directory does not exist, create
+            if not os.path.exists(output_folder_path):
+                os.makedirs(output_folder_path)
+
+            # TODO: setta I GIUSTI EVALUATOR QUI!!!!
+            runParameterSearch_Collaborative_partial = partial(runParameterSearch_Collaborative,
+                                                               URM_train = URM_train,
+                                                               ICM_train = ICM_obj,
+                                                               metric_to_optimize = "MAP",
+                                                               n_cases = 50,
+                                                               n_random_starts = 20,
+                                                               evaluator_validation_earlystopping = evaluator_valid_hybrid,
+                                                               evaluator_validation = evaluator_valid_hybrid,
+                                                               evaluator_test = evaluator_test,
+                                                               output_folder_path = output_folder_path,
+                                                               allow_weighting = False,
+                                                               #similarity_type_list = ["cosine", 'jaccard'],
+                                                               parallelizeKNN = False,
+                                                               list_rec = rec_perm)
+            pool = multiprocessing.Pool(processes=int(multiprocessing.cpu_count()), maxtasksperchild=1)
+            pool.map(runParameterSearch_Collaborative_partial, collaborative_algorithm_list)
 
 
     #
