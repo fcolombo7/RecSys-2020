@@ -28,7 +28,7 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 | SLIM_ElasticNet | 0.0380146 | {'topK': 992, 'l1_ratio': 0.004065081925341167, 'alpha': 0.003725005053334143}
 | Slim_BPR | 0.0349263 | {'topK': 979, 'epochs': 130, 'symmetric': False, 'sgd_mode': 'adam', 'lambda_i': 0.004947329669424629, 'lambda_j': 1.1534760845071758e-05, 'learning_rate': 0.0001}
 
-##Combo performance
+## Combo performance
 
 | Combined Recs | MAP on **validation_hybrid** | optimal parameters |
 | ------ | ------| ------|
@@ -50,7 +50,8 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 | ------ | ------| ------| ----|
 | PureSVD* | 0.0217047 | {'num_factors': 500} | configurazione al limite |
 | SLIM_Elasticnet* | 0.0329999 | {'topK': 954, 'l1_ratio': 3.87446082207643e-05, 'alpha': 0.07562657698792305} | non ancora finito |
-
+| Slim_BPR | 0.0288176 | {'topK': 1000, 'epochs': 45, 'symmetric': False, 'sgd_mode': 'sgd', 'lambda_i': 0.01, 'lambda_j': 1e-05, 'learning_rate': 0.0001} | - |
+| IALS | 0.0397605 | {'num_factors': 83, 'confidence_scaling': 'linear', 'alpha': 28.4278070726612, 'epsilon': 1.0234211788885077, 'reg': 0.0027328110246575004, 'epochs': 20} | non ancora finito |
 
 ---
 ---
