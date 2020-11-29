@@ -42,6 +42,10 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 | RP3Beta, P3alpha, ItemKNNCF| 0.0535307 | 'alpha': 0.367698407319822, 'l1_ratio': 0.5878133798647788
 | RP3Beta, P3alpha, UserKNNCF| 0.0541693 | 'alpha': 0.6405838432360388, 'l1_ratio': 0.4188312253799342
 | RP3Beta, UserKNNCF, ItemKNNCBF| 0.0680765 | 'alpha': 0.4648716125499346, 'l1_ratio': 0.292302921903516
+| ItemKNNCF, ItemKNNCBF, SLIM_EN | 0.0668203 | 'alpha': 0.7783657178315921, 'l1_ratio': 0.9570845000744118
+| P3alpha, ItemKNNCBF, SLIM_EN | 0.0676024 | 'alpha': 1.0, 'l1_ratio': 0.38257019222950617
+| RP3beta, ItemKNNCBF, SLMI_EN | 0.0669610 | {'alpha': 0.9986952651067782, 'l1_ratio': 0.40273040559834994}
+| UserKNNCF, ItemKNNCBF, SLIM_EN | 0.0668025 | {'alpha': 0.4960538848298478, 'l1_ratio': 0.3805091314133038}
 
 ## New Segmentation
 * Range: **[0, 3)** //users with 1 or 2 interactions
@@ -52,6 +56,21 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 | SLIM_Elasticnet | 0.0329999 | {'topK': 954, 'l1_ratio': 3.87446082207643e-05, 'alpha': 0.07562657698792305} | - |
 | Slim_BPR | 0.0288176 | {'topK': 1000, 'epochs': 45, 'symmetric': False, 'sgd_mode': 'sgd', 'lambda_i': 0.01, 'lambda_j': 1e-05, 'learning_rate': 0.0001} | - |
 | IALS | 0.0397605 | {'num_factors': 83, 'confidence_scaling': 'linear', 'alpha': 28.4278070726612, 'epsilon': 1.0234211788885077, 'reg': 0.0027328110246575004, 'epochs': 20} | non ancora finito |
+| ItemKNNCBF | 0.0377209 | {'topK': 225, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'}
+| ItemKNNCF | 0.0352769 | {'topK': 220, 'shrink': 175, 'similarity': 'cosine', 'normalize': False}
+| UserKNNCF | 0.0384740 | {'topK': 405, 'shrink': 1000, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 2.0}
+| P3alpha | 0.0373801 | {'topK': 542, 'alpha': 0.0019504824518365997, 'normalize_similarity': False}
+| RP3beta | 0.0368763 | {'topK': 974, 'alpha': 0.190821920493987, 'beta': 0.001834105482327875, 'normalize_similarity': False}
+
+* Range: **[3, -1)** //users with more than 2 interactions
+
+| Algorithm | MAP | optimal parameters | Notes|
+| ------ | ------| ------| ----|
+| ItemKNNCBF | 0.0302073 | {'topK': 205, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'}
+| ItemKNNCF | 0.0376856 | {'topK': 565, 'shrink': 554, 'similarity': 'tversky', 'normalize': True, 'tversky_alpha': 1.9109121434662428, 'tversky_beta': 1.7823834698905734}
+| UserKNNCF | 0.0426341 | {'topK': 190, 'shrink': 0, 'similarity': 'cosine', 'normalize': True}
+| P3alpha | 0.0447004 | {'topK': 438, 'alpha': 0.41923120471415165, 'normalize_similarity': False}
+| RP3beta | 0.0435639 | {'topK': 753, 'alpha': 0.3873710051288722, 'beta': 0.0, 'normalize_similarity': False}
 
 ---
 ---
