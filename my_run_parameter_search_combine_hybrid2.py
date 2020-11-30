@@ -100,48 +100,62 @@ def read_data_split_and_search():
     evaluator_valid_hybrid = EvaluatorHoldout(URM_valid_hybrid, cutoff_list=[10])
     evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
+    """
+    earlystopping_keywargs = {"validation_every_n": 5,
+                              "stop_on_validation": True,
+                              "evaluator_object": evaluator_valid_hybrid,
+                              "lower_validations_allowed": 5,
+                              "validation_metric": 'MAP',
+                              }
+    
+    print('IALS training...')
+    ials = IALSRecommender(URM_train, verbose=False)
+    ials_params = {'num_factors': 83, 'confidence_scaling': 'linear', 'alpha': 28.4278070726612,
+                   'epsilon': 1.0234211788885077, 'reg': 0.0027328110246575004, 'epochs': 20}
+    ials.fit(**ials_params, **earlystopping_keywargs)
+    print("Done")
+    
+    
     print("PureSVD training...")
     psvd = PureSVDRecommender(URM_train, verbose=False)
     psvd_params = {'num_factors': 711}
     psvd.fit(**psvd_params)
     print("Done")
+    """
     print("Rp3beta training...")
     rp3b = RP3betaRecommender(URM_train, verbose=False)
-    rp3b_params = {'topK': 974, 'alpha': 0.190821920493987, 'beta': 0.001834105482327875, 'normalize_similarity': False}
+    rp3b_params = {'topK': 753, 'alpha': 0.3873710051288722, 'beta': 0.0, 'normalize_similarity': False}
     rp3b.fit(**rp3b_params)
     print("Done")
     print("P3alpha training...")
     p3a = P3alphaRecommender(URM_train, verbose=False)
-    p3a_params = {'topK': 542, 'alpha': 0.0019504824518365997, 'normalize_similarity': False}
+    p3a_params = {'topK': 438, 'alpha': 0.41923120471415165, 'normalize_similarity': False}
     p3a.fit(**p3a_params)
     print("Done")
     print("ItemKnnCF training...")
     icf = ItemKNNCFRecommender(URM_train, verbose=False)
-    icf_params = {'topK': 220, 'shrink': 175, 'similarity': 'cosine', 'normalize': False}
+    icf_params = {'topK': 565, 'shrink': 554, 'similarity': 'tversky', 'normalize': True, 'tversky_alpha': 1.9109121434662428, 'tversky_beta': 1.7823834698905734}
     icf.fit(**icf_params)
     print("Done")
     print("UserKnnCF training...")
     ucf = UserKNNCFRecommender(URM_train, verbose=False)
-    ucf_params = {'topK': 405, 'shrink': 1000, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 2.0}
+    ucf_params = {'topK': 190, 'shrink': 0, 'similarity': 'cosine', 'normalize': True}
     ucf.fit(**ucf_params)
     print("Done")
     print("ItemKnnCBF training...")
     icb = ItemKNNCBFRecommender(URM_train, ICM_obj, verbose=False)
-    icb_params = {'topK': 225, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'}
+    icb_params = {'topK': 205, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'}
     icb.fit(**icb_params)
     print("Done")
+    """
     print("SlimElasticNet training...")
     sen = SLIMElasticNetRecommender(URM_train, verbose=False)
     sen_params = {'topK': 954, 'l1_ratio': 3.87446082207643e-05, 'alpha': 0.07562657698792305}
     sen.fit(**sen_params)
     print("Done")
-    print('IALS training...')
-    ials=IALSRecommender(URM_train, verbose=False)
-    ials_params= {'num_factors': 83, 'confidence_scaling': 'linear', 'alpha': 28.4278070726612, 'epsilon': 1.0234211788885077, 'reg': 0.0027328110246575004, 'epochs': 20}
-    ials.fit(ials_params)
-    print("Done")
+    """
 
-    list_recommender = [psvd, rp3b, p3a, icf, ucf, icb, sen, ials]
+    list_recommender = [icb, icf, ucf, p3a, rp3b]
     list_already_seen = []
 
     for rec_perm in combinations(list_recommender, 3):
@@ -149,7 +163,7 @@ def read_data_split_and_search():
         if rec_perm not in combinations(list_already_seen, 3):
 
             recommender_names = '_'.join([r.RECOMMENDER_NAME for r in rec_perm])
-            output_folder_path = "result_experiments_v3/seed_" + str(seed)+'_0-3' + '/' + recommender_names + '/'
+            output_folder_path = "result_experiments_v3/seed_" + str(seed)+'_3--1' + '/' + recommender_names + '/'
 
             # If directory does not exist, create
             if not os.path.exists(output_folder_path):
