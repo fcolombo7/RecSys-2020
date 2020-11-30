@@ -118,7 +118,16 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 | RP3beta | 0.0435639 | {'topK': 753, 'alpha': 0.3873710051288722, 'beta': 0.0, 'normalize_similarity': False}
 | SLIM_ElasticNet | 0.0412542 | {'topK': 517, 'l1_ratio': 2.164297353389958e-05, 'alpha': 0.006016185597042145}
 | SLIM_BPR | 0.0384652 | {'topK': 732, 'epochs': 135, 'symmetric': True, 'sgd_mode': 'adagrad', 'lambda_i': 0.0010988284763975408, 'lambda_j': 0.0005670232873552422, 'learning_rate': 0.004876973627195952}
-
+ItemKNNCBF, ItemKNNCF, P3alpha	-> MAP: 0.0686834  
+ItemKNNCBF, ItemKNNCF, RP3beta	-> MAP: 0.0688763  
+ItemKNNCBF, ItemKNNCF, UserKNNCF-> MAP: 0.0666803  
+ItemKNNCBF, P3alpha, RP3beta	-> MAP: 0.0683870  
+ItemKNNCBF, UserKNNCF, P3alpha	-> MAP: 0.0689529  
+ItemKNNCBF, UserKNNCF, RP3beta	-> MAP: 0.0687652  
+ItemKNNCF, P3alpha, RP3beta		-> MAP: 0.0563827  
+ItemKNNCF, UserKNNCF, P3alpha	-> MAP: 0.0568228  
+ItemKNNCF, UserKNNCF, RP3beta 	-> MAP: 0.0561869  
+UserKNNCF, P3alpha, RP3beta		-> MAP: 0.0565108  
 ---
 ---
 # User segmentation
