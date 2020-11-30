@@ -66,6 +66,43 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 | P3alpha | 0.0373801 | {'topK': 542, 'alpha': 0.0019504824518365997, 'normalize_similarity': False}
 | RP3beta | 0.0368763 | {'topK': 974, 'alpha': 0.190821920493987, 'beta': 0.001834105482327875, 'normalize_similarity': False}
 
+### combo-performance [0,3)
+* __IALS, ItemKNNCBF, ItemKNNCF 	-> MAP: 0.0749199__
+* __IALS, ItemKNNCBF, P3alpha		-> MAP: 0.0731597__
+* __IALS, ItemKNNCBF, PureSVD		-> MAP: 0.0730645__
+* __IALS, ItemKNNCBF, RP3beta		-> MAP: 0.0734170__
+* __IALS, ItemKNNCBF, UserKNNCF		-> MAP: 0.0738064__
+* IALS, ItemKNNCF, P3alpha		-> LOW (0.0516691)
+* IALS, ItemKNNCF, PureSVD		-> LOW (0.0488379)
+* IALS, ItemKNNCF, RP3beta		-> LOW (0.0523218)
+* IALS, ItemKNNCF, UserKNNCF		-> LOW (0.0506494)
+* IALS, P3alpha, PureSVD			-> LOW (0.0514158)
+* IALS, P3alpha, RP3beta			-> LOW (0.0509690)
+* IALS, RP3beta, PureSVD			-> LOW (0.0517357)
+* IALS, UserKNNCF, P3alpha		-> LOW (0.0514009)
+* IALS, UserKNNCF, PureSVD		-> LOW (0.0507924)
+* IALS, UserKNNCF, RP3beta		-> LOW (0.0515633)
+* ItemKNNCBF, ItemKNNCF, P3alpha	-> MAP: 0.0653232
+* ItemKNNCBF, ItemKNNCF, PureSVD	-> MAP: 0.0639673
+* ItemKNNCBF, ItemKNNCF, RP3beta	-> MAP: 0.0702089
+* ItemKNNCBF, ItemKNNCF, UserKNNCF-> MAP: 0.0676479
+* ItemKNNCBF, P3alpha, PureSVD	-> MAP: 0.0677768
+* ItemKNNCBF, P3alpha, RP3beta	-> MAP: 0.0689340 
+* ItemKNNCBF, RP3beta, PureSVD	-> MAP: 0.0696135
+* ItemKNNCBF, UserKNNCF, P3alpha	-> MAP: 0.0651108
+* ItemKNNCBF, UserKNNCF, PureSVD	-> LOW (0.0544276) 
+* ItemKNNCBF, UserKNNCF, RP3beta	-> LOW (0.0690862)
+* ItemKNNCF, P3alpha, PureSVD		-> LOW (0.0490127) 
+* ItemKNNCF, P3alpha, RP3beta		-> LOW (0.0464365)
+* ItemKNNCF, RP3beta, PureSVD		-> LOW (0.0479192)
+* ItemKNNCF, UserKNNCF, P3alpha	-> LOW (0.0503812)
+* ItemKNNCF, UserKNNCF, PureSVD	-> LOW (0.0487587) 
+* ItemKNNCF, UserKNNCF, RP3beta	-> LOW (0.0465236)
+* P3alpha, RP3beta, PureSVD		-> LOW (0.0493235)
+* UserKNNCF, P3alpha, RP3beta		-> LOW (0.0495286)
+* UserKNNCF, P3alpha, PureSVD		-> LOW (0.0463064)
+* UserKNNCF, RP3beta, PureSVD		-> LOW (0.0509870)
+---
 * Range: **[3, -1)** //users with more than 2 interactions
 
 | Algorithm | MAP | optimal parameters | Notes|
