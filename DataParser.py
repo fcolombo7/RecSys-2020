@@ -97,7 +97,7 @@ class DataParser(object):
         num_features = max(self.__icm_frame.feature_id.to_list()) + 1
         num_items = max(self.__icm_frame.item_id.to_list()) + 1
         icm_shape = (num_items, num_features)
-        icm_all = sp.csr_matrix((self.__icm_frame.item_id.to_list(), (self.__icm_frame.item_id.to_list(), self.__icm_frame.feature_id.to_list())), shape=icm_shape)
+        icm_all = sp.csr_matrix((self.__icm_frame.value.to_list(), (self.__icm_frame.item_id.to_list(), self.__icm_frame.feature_id.to_list())), shape=icm_shape)
         return icm_all
 
     def filter_URM_test_by_range(self, URM_train, URM_test, filter_range=(0,-1)):

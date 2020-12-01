@@ -14,9 +14,14 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 
 | Algorithm | MAP on **validation_sub** | optimal parameters |
 | ------ | ------| ------|
-| ItemKNNCBF_asym | 0.0299853 | {'topK': 545, 'shrink': 790, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.3706399568074206, 'feature_weighting': 'BM25'}
-| ItemKNNCBF_cosine | 0.0306796 | {'topK': 205, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'}
-| ItemKNNCBF_jaccard | 0.0266469 | {'topK': 105, 'shrink': 82, 'similarity': 'jaccard', 'normalize': True}
+| ItemKNNCBF_asym_**err** | 0.0299853 | {'topK': 545, 'shrink': 790, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.3706399568074206, 'feature_weighting': 'BM25'}
+| ItemKNNCBF_cosine_**err** | 0.0306796 | {'topK': 205, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'}
+| ItemKNNCBF_jaccard_**err** | 0.0266469 | {'topK': 105, 'shrink': 82, 'similarity': 'jaccard', 'normalize': True}
+| ItemKNNCBF_asym | 0.0243888 | {'topK': 775, 'shrink': 849, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.5913208493761569, 'feature_weighting': 'TF-IDF'}
+| ItemKNNCBF_cosine | 0.0246950 | {'topK': 630, 'shrink': 261, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'TF-IDF'}
+| ItemKNNCBF_jaccard | 0.0263456 | {'topK': 135, 'shrink': 246, 'similarity': 'jaccard', 'normalize': True}
+| ItemKNNCBF_dice | 0.0273667 | {'topK': 65, 'shrink': 0, 'similarity': 'dice', 'normalize': True}
+| ItemKNNCBF_tversky | 0.0269525 | {'topK': 235, 'shrink': 104, 'similarity': 'tversky', 'normalize': True, 'tversky_alpha': 0.7080647543936939, 'tversky_beta': 0.15722506241462988}
 | ItemKNNCF_asym | 0.0353139 | {'topK': 55, 'shrink': 1000, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.0}
 | ItemKNNCF_cosine | 0.0350612 | {'topK': 655, 'shrink': 130, 'similarity': 'cosine', 'normalize': True}
 | ItemKNNCF_jaccard | 0.0350433 | {'topK': 460, 'shrink': 234, 'similarity': 'jaccard', 'normalize': False}
