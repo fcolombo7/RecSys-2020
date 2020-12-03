@@ -35,6 +35,8 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 
 ## Combo performance
 
+* Linear Combination
+
 | Combined Recs | MAP on **validation_hybrid** | optimal parameters |
 | ------ | ------| ------|
 | P3alpha, ItemKNNCF, UserKNNCF| 0.0542544 | 'alpha': 0.5630173292967398, 'l1_ratio': 0.92733589638295
@@ -81,6 +83,22 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 | **ERR** RP3beta, ItemKNNCBF, SLMI_BPR **ERR** | 0.0676888 | {'alpha': 0.3592184105265153, 'l1_ratio': 0.2874563071761684}
 | **ERR** UserKNNCF, ItemKNNCBF, SLIM_BPR **ERR** | 0.0666102 | {'alpha': 0.36976685355295563, 'l1_ratio': 0.46692198040584476}
 | **ERR** ItemKNNCBF, SLIM_EN, SLIM_BPR **ERR** | 0.0667062 | {'alpha': 0.9651828293963296, 'l1_ratio': 0.14049121822460078}
+
+* Merge Combination
+
+| Combined Recs | MAP on **validation_hybrid** | optimal parameters |
+| ------ | ------| ------|
+| ItemKNNCBF, ItemKNNCF, P3alpha | 0.0655122 | {'alpha': 0.9004575733942728, 'l1_ratio': 0.26510663025884135, 'topK': 888}
+| ItemKNNCBF, ItemKNNCF, RP3beta | 0.0648048 | {'alpha': 0.6299182764826382, 'l1_ratio': 0.9675762628242017, 'topK': 864} 
+| ItemKNNCBF, ItemKNNCF, SLIM_EN | 0.0634502 | {'alpha': 0.3791657333411357, 'l1_ratio': 0.23126551664267164, 'topK': 990}
+| ItemKNNCBF, P3alpha, RP3beta | 0.0621390 | {'alpha': 0.6299182764826382, 'l1_ratio': 0.9675762628242017, 'topK': 864}
+| ItemKNNCBF, P3alpha, SLIM_EN | 0.0651354 | {'alpha': 0.9712321721669441, 'l1_ratio': 0.6879306727642494, 'topK': 990}
+| ItemKNNCBF, RP3beta, SLIM_EN | 0.0652897 | {'alpha': 0.6355738550417837, 'l1_ratio': 0.6617849709204384, 'topK': 538}
+| ItemKNNCF, P3alpha, RP3beta | 0.0541159 | {'alpha': 0.44112400857241485, 'l1_ratio': 0.4636970676140909, 'topK': 489}
+| ItemKNNCF, P3alpha, SLIM_EN | 0.0529576 | {'alpha': 1.0, 'l1_ratio': 0.0, 'topK': 1000} --> only P3alpha
+| ItemKNNCF, RP3beta, SLIM_EN | 0.0540153 | {'alpha': 1.0, 'l1_ratio': 0.0, 'topK': 373} ---> only RP3beta
+| P3alpha, RP3beta, SLIM_EN | 0.0530004 | {'alpha': 0.8589000153868548, 'l1_ratio': 0.4263692698842382, 'topK': 636}
+
 
 ## New Segmentation
 * Range: **[0, 3)** //users with 1 or 2 interactions
