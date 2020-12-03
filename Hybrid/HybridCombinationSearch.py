@@ -47,6 +47,18 @@ class HybridCombinationSearch(BaseItemSimilarityMatrixRecommender):
         item_weights_2 = self.__rec2._compute_item_score(user_id_array)
         item_weights_3 = self.__rec3._compute_item_score(user_id_array)
 
+        #normalization
+        item_weights_1_max = item_weights_1.max()
+        item_weights_2_max = item_weights_2.max()
+        item_weights_3_max = item_weights_3.max()
+
+        if not item_weights_1_max == 0:
+            item_weights_1 /= item_weights_1_max
+        if not item_weights_2_max == 0:
+            item_weights_2 /= item_weights_2_max
+        if not item_weights_3_max == 0:
+                item_weights_3 /= item_weights_3_max
+
         item_weights = item_weights_1 * self.__a + item_weights_2 * self.__b + item_weights_3 * self.__c
 
         return item_weights
