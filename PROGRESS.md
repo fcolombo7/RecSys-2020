@@ -32,6 +32,7 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 | P3alpha | 0.0415311 | {'topK': 131, 'alpha': 0.33660811631883863, 'normalize_similarity': False}
 | SLIM_ElasticNet | 0.0380146 | {'topK': 992, 'l1_ratio': 0.004065081925341167, 'alpha': 0.003725005053334143}
 | Slim_BPR | 0.0349263 | {'topK': 979, 'epochs': 130, 'symmetric': False, 'sgd_mode': 'adam', 'lambda_i': 0.004947329669424629, 'lambda_j': 1.1534760845071758e-05, 'learning_rate': 0.0001}
+| S-SLIM_EN | 0.0464815 | {'beta': 0.4849594591575789, 'topK': 1000, 'l1_ratio': 1e-05, 'alpha': 0.001}
 
 ## Combo performance
 
@@ -98,6 +99,46 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 | ItemKNNCF, P3alpha, SLIM_EN | 0.0529576 | {'alpha': 1.0, 'l1_ratio': 0.0, 'topK': 1000} --> only P3alpha
 | ItemKNNCF, RP3beta, SLIM_EN | 0.0540153 | {'alpha': 1.0, 'l1_ratio': 0.0, 'topK': 373} ---> only RP3beta
 | P3alpha, RP3beta, SLIM_EN | 0.0530004 | {'alpha': 0.8589000153868548, 'l1_ratio': 0.4263692698842382, 'topK': 636}
+
+* Linear Combination with **NORMALIZATION**
+
+| Combined Recs | MAP on **validation_hybrid** | optimal parameters |
+| ------ | ------| ------|
+| ItemKNNCBF, ItemKNNCF, P3alpha | 0.0640789 | {'alpha': 0.27094237120805925, 'l1_ratio': 0.9998550263180496}
+| ItemKNNCBF, ItemKNNCF, RP3beta | 0.0630379 | {'alpha': 0.30215925285279965, 'l1_ratio': 0.48033878522040957}
+| ItemKNNCBF, ItemKNNCF, SLIM_BPR | 0.0610412 | {'alpha': 0.8124123649444593, 'l1_ratio': 0.25648942001711633}
+| ItemKNNCBF, ItemKNNCF, SLIM_EN | 0.0617823 | {'alpha': 0.5011523958099686, 'l1_ratio': 0.6835202748204333}
+| ItemKNNCBF, ItemKNNCF, UserKNNCF | 0.0626716 | {'alpha': 0.23127746676269062, 'l1_ratio': 0.47037997538194565}
+| ItemKNNCBF, P3alpha, RP3beta | 0.0638838 | {'alpha': 0.32630431880229166, 'l1_ratio': 0.4598175570701317}
+| ItemKNNCBF, P3alpha, SLIM_BPR | 0.0638735 | {'alpha': 0.9966101776460795, 'l1_ratio': 0.24103276386735034} 
+| ItemKNNCBF, P3alpha, SLIM_EN | 0.0639945 | {'alpha': 0.9678477202248401, 'l1_ratio': 0.26287752701640094}
+| ItemKNNCBF, RP3beta, SLIM_BPR | 0.0615707 | {'alpha': 0.7781420779249448, 'l1_ratio': 0.27134602211348197}
+| ItemKNNCBF, RP3beta, SLIM_EN | 0.0624512 | {'alpha': 0.7389620492322015, 'l1_ratio': 0.3355244273594045}
+| ItemKNNCBF, SLIM_EN, SLIM_BPR | 0.0623007 | {'alpha': 0.7753869940322178, 'l1_ratio': 0.4380906766055395}
+| ItemKNNCBF, UserKNNCF, P3alpha | 0.0647686 | {'alpha': 0.4840277797811048, 'l1_ratio': 0.356265002578487} 
+| ItemKNNCBF, UserKNNCF, RP3beta | 0.0640256 | {'alpha': 0.39585017788453875, 'l1_ratio': 0.2969289208656836}
+| ItemKNNCBF, UserKNNCF, SLIM_BPR | 0.0615470 | {'alpha': 0.8170261573317669, 'l1_ratio': 0.20761151334998523}
+| ItemKNNCBF, UserKNNCF, SLIM_EN | 0.0625221 | {'alpha': 0.696288087190842, 'l1_ratio': 0.3051487184937027}
+| ItemKNNCF, P3alpha, RP3beta | 0.0540847 | {'alpha': 0.13211292014716505, 'l1_ratio': 0.9841972871240037}
+| ItemKNNCF, P3alpha, SLIM_BPR | 0.0532125 | {'alpha': 0.7843155132242284, 'l1_ratio': 0.20247012940631276}
+| ItemKNNCF, P3alpha, SLIM_EN | 0.0529564 | {'alpha': 1.0, 'l1_ratio': 0.0} --> **pure P3alpha**
+| ItemKNNCF, RP3beta, SLIM_BPR | 0.0529982 | {'alpha': 0.9873729786283573, 'l1_ratio': 0.11357727617112759}
+| ItemKNNCF, RP3beta, SLIM_EN | 0.0523226 | {'alpha': 0.9949623682515907, 'l1_ratio': 0.007879399002699851}
+| ItemKNNCF, SLIM_EN, SLIM_BPR | 0.0512052 | {'alpha': 0.8434066208554849, 'l1_ratio': 0.4628304123637582}
+| ItemKNNCF, UserKNNCF, P3alpha | 0.0532817 | {'alpha': 0.4318367153026247, 'l1_ratio': 0.06753630242082177}
+| ItemKNNCF, UserKNNCF, RP3beta | 0.0539684 | {'alpha': 0.19390580434445875, 'l1_ratio': 0.2522643001286576}
+| ItemKNNCF, UserKNNCF, SLIM_BPR | 0.0519019 | {'alpha': 0.9083484410214647, 'l1_ratio': 0.27023920102996396}
+| ItemKNNCF, UserKNNCF, SLIM_EN | 0.0515942 | {'alpha': 0.8854496569140459, 'l1_ratio': 0.17103030574896252}
+| P3alpha, RP3beta, SLIM_BPR | 0.0530645 | {'alpha': 0.9595683171219453, 'l1_ratio': 0.8747916676441719}
+| P3alpha, RP3beta, SLIM_EN | 0.0529564 | {'alpha': 1.0, 'l1_ratio': 1.0} --> **pure P3alpha**
+| P3alpha, SLIM_EN, SLIM_BPR |  | {'alpha': 1.0, 'l1_ratio': 1.0} --> **pure P3alpha**
+| RP3beta, SLIM_EN, SLIM_BPR |  | {'alpha': 1.0, 'l1_ratio': 1.0} --> **pure RP3beta**
+| UserKNNCF, P3alpha, RP3beta | 0.0540508 | {'alpha': 0.9394644725243001, 'l1_ratio': 0.4569374184464653}
+| UserKNNCF, P3alpha, SLIM_EN | 0.0532232 | {'alpha': 0.9914065625485552, 'l1_ratio': 0.626411568207146}
+| UserKNNCF, P3alpha, SLIM_BPR |  | {'alpha': 1.0, 'l1_ratio': 0.0} --> **pure P3alpha**
+| UserKNNCF, RP3beta, SLIM_EN | 0.0526332 | {'alpha': 0.9928115184812, 'l1_ratio': 0.4394977708983866}
+| UserKNNCF, RP3beta, SLIM_BPR | 0.0523734 | {'alpha': 0.9824185519731099, 'l1_ratio': 0.0049365500554859896}
+| UserKNNCF, SLIM_EN, SLIM_BPR | 0.0511976 | {'alpha': 0.9979141772440999, 'l1_ratio': 0.9695756615044695}
 
 
 ## New Segmentation
