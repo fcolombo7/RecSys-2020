@@ -144,7 +144,7 @@ def runParameterSearch_Content(recommender_class, URM_train, ICM_object, ICM_nam
 
     output_file_name_root = recommender_class.RECOMMENDER_NAME + "_{}".format(ICM_name)
 
-    parameterSearch = SearchBayesianSkopt(recommender_class, URM_train, k = k, seed = seed, evaluator_validation=evaluator_validation, evaluator_test=evaluator_test)
+    parameterSearch = SearchBayesianSkopt(recommender_class, URM_train, k = k, seed = seed, evaluator_test=evaluator_test)
 
 
     if similarity_type_list is None:
@@ -202,13 +202,22 @@ def runParameterSearch_Content(recommender_class, URM_train, ICM_object, ICM_nam
 
 
 
-def runParameterSearch_Collaborative(recommender_class, URM_train, ICM_train=None, URM_train_last_test = None, metric_to_optimize = "PRECISION",
-                                     evaluator_validation = None, evaluator_test = None, evaluator_validation_earlystopping = None,
-                                     output_folder_path ="result_experiments/", parallelizeKNN = True,
-                                     n_cases = 35, n_random_starts = 5, resume_from_saved = False, save_model = "best",
+def runParameterSearch_Collaborative(recommender_class,
+                                     URM_train,
+                                     ICM_train=None,
+                                     URM_train_last_test = None,
+                                     metric_to_optimize = "PRECISION",
+                                     evaluator_test = None,
+                                     output_folder_path ="result_experiments/",
+                                     parallelizeKNN = True,
+                                     n_cases = 35,
+                                     n_random_starts = 5,
+                                     resume_from_saved = False,
+                                     save_model = "best",
                                      allow_weighting = True,
                                      similarity_type_list = None,
-                                     k = 5, seed = None):
+                                     k = 5,
+                                     seed = None):
 
 
 
@@ -218,7 +227,7 @@ def runParameterSearch_Collaborative(recommender_class, URM_train, ICM_train=Non
 
     earlystopping_keywargs = {"validation_every_n": 5,
                               "stop_on_validation": True,
-                              "evaluator_object": evaluator_validation_earlystopping,
+                              "evaluator_object": None,
                               "lower_validations_allowed": 5,
                               "validation_metric": metric_to_optimize,
                               }
@@ -243,7 +252,7 @@ def runParameterSearch_Collaborative(recommender_class, URM_train, ICM_train=Non
             """
 
 
-            parameterSearch = SearchSingleCase(recommender_class, evaluator_validation=evaluator_validation, evaluator_test=evaluator_test)
+            parameterSearch = SearchSingleCase(recommender_class, evaluator_test=evaluator_test)
 
             recommender_input_args = SearchInputRecommenderArgs(
                 CONSTRUCTOR_POSITIONAL_ARGS = [URM_train],

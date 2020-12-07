@@ -116,7 +116,7 @@ class SearchAbstractClass(object):
     def __init__(self, recommender_class,
                  URM_train,
                  k = 5,
-                 seed = 1205,
+                 seed = 1666,
                  evaluator_test = None,
                  verbose = True):
 
@@ -282,11 +282,14 @@ class SearchAbstractClass(object):
                                                       **self.recommender_input_args.CONSTRUCTOR_KEYWORD_ARGS)
 
 
-        self._print("{}: Testing config: {}".format(self.ALGORITHM_NAME, current_fit_parameters))
+        self._print("{}_FOLD-{}: Testing config: {}".format(self.ALGORITHM_NAME, index, current_fit_parameters))
 
+        dict_keywords = self.recommender_input_args.FIT_KEYWORD_ARGS.copy()
+        if 'evaluator_object' in dict_keywords.keys():
+            dict_keywords['evaluator_object'] = self.evaluator_list[index]
 
         recommender_instance.fit(*self.recommender_input_args.FIT_POSITIONAL_ARGS,
-                                 **self.recommender_input_args.FIT_KEYWORD_ARGS,
+                                 **dict_keywords,
                                  **current_fit_parameters)
 
         train_time = time.time() - start_time
@@ -399,7 +402,8 @@ class SearchAbstractClass(object):
             train_time_list = []
             evalation_time_list = []
             for i in range(self.k):
-                result_dict_temp, result_string_temp, recommender_instance_temp, train_time_temp, evaluation_time_temp = self._evaluate_on_validation(current_fit_parameters_dict)
+
+                result_dict_temp, result_string_temp, recommender_instance_temp, train_time_temp, evaluation_time_temp = self._evaluate_on_validation(current_fit_parameters_dict, i)
                 
                 result_dict_list.append(result_dict_temp)
                 #result_string_list.append(result_string_temp)

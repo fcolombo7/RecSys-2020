@@ -15,7 +15,7 @@ import traceback
 
 class SearchBayesianSkopt(SearchAbstractClass):
 
-    ALGORITHM_NAME = "SearchBayesianSkopt"
+    ALGORITHM_NAME = "SearchBayesianSkopt-CV"
 
     def __init__(self, recommender_class, URM_train, k = 5, seed = None, evaluator_test = None, verbose = True):
 
