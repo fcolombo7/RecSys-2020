@@ -5,7 +5,8 @@ Created on 22/11/17
 
 @author: Maurizio Ferrari Dacrema
 """
-
+from Base.NonPersonalizedRecommender import Random, TopPop
+from DataParser import DataParser
 from EASE_R.EASE_R_Recommender import EASE_R_Recommender
 from Hybrid.HybridCombinationSearch import HybridCombinationSearch
 from KNN.ItemKNNCBFRecommender import ItemKNNCBFRecommender
@@ -52,8 +53,8 @@ def read_data_split_and_search():
     URM_all = parser.get_URM_all()
     ICM_obj = parser.get_ICM_all()
 
-    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage = 0.80, seed = seed)
-    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train, train_percentage = 0.80, seed = seed)
+    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage = 0.85, seed = seed)
+    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train, train_percentage = 0.85, seed = seed)
 
     k = 5
     
@@ -68,23 +69,23 @@ def read_data_split_and_search():
     collaborative = True
 
     content_algorithm_list= [
-        ItemKNNCBFRecommender
+        #ItemKNNCBFRecommender
     ]
 
 
     collaborative_algorithm_list = [
-        Random,
-        TopPop,
-        P3alphaRecommender,
-        RP3betaRecommender,
+        #Random,
+        #TopPop,
+        #P3alphaRecommender,
+        #RP3betaRecommender,
         ItemKNNCFRecommender,
-        UserKNNCFRecommender,
-        MatrixFactorization_BPR_Cython,
-        MatrixFactorization_FunkSVD_Cython,
-        PureSVDRecommender,
-        SLIM_BPR_Cython,
-        SLIMElasticNetRecommender,
-        IALSRecommender,
+        #UserKNNCFRecommender,
+        #MatrixFactorization_BPR_Cython,
+        #MatrixFactorization_FunkSVD_Cython,
+        #PureSVDRecommender,
+        #SLIM_BPR_Cython,
+        #SLIMElasticNetRecommender,
+        #IALSRecommender,
     ]
 
 
@@ -100,10 +101,8 @@ def read_data_split_and_search():
                                                      URM_train=URM_train,
                                                      ICM_object=ICM_obj,
                                                      ICM_name='1BookFeatures',
-                                                     n_cases = 70,
-                                                     n_random_starts = 30,
-                                                     evaluator_validation= evaluator_valid_sub,
-                                                     evaluator_test = evaluator_valid_hybrid,
+                                                     n_cases = 50,
+                                                     n_random_starts = 20,
                                                      metric_to_optimize = "MAP",
                                                      output_folder_path=output_folder_path,
                                                      parallelizeKNN = False,
@@ -120,14 +119,13 @@ def read_data_split_and_search():
         runParameterSearch_Collaborative_partial = partial(runParameterSearch_Collaborative,
                                                            URM_train = URM_train,
                                                            metric_to_optimize = "MAP",
-                                                           n_cases = 70,
-                                                           n_random_starts = 30,
-                                                           evaluator_validation_earlystopping = evaluator_validation,
-                                                           evaluator_validation = evaluator_validation,
-                                                           evaluator_test = evaluator_test,
+                                                           n_cases = 50,
+                                                           n_random_starts = 20,
+                                                           #evaluator_test = evaluator_test,
                                                            output_folder_path = output_folder_path,
-                                                           #similarity_type_list = ["cosine"],
+                                                           similarity_type_list = ["cosine"],
                                                            parallelizeKNN = False,
+                                                           allow_weighting = False,
                                                            k = k,
                                                            seed = seed)
 
