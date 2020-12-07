@@ -6,15 +6,19 @@ Created on 22/11/17
 @author: Maurizio Ferrari Dacrema
 """
 
-from Base.NonPersonalizedRecommender import TopPop, Random
+from EASE_R.EASE_R_Recommender import EASE_R_Recommender
+from Hybrid.HybridCombinationSearch import HybridCombinationSearch
+from KNN.ItemKNNCBFRecommender import ItemKNNCBFRecommender
 from KNN.UserKNNCFRecommender import UserKNNCFRecommender
 from KNN.ItemKNNCFRecommender import ItemKNNCFRecommender
+from MatrixFactorization.IALSRecommender import IALSRecommender
 from SLIM_BPR.Cython.SLIM_BPR_Cython import SLIM_BPR_Cython
 from SLIM_ElasticNet.SLIMElasticNetRecommender import SLIMElasticNetRecommender
 from GraphBased.P3alphaRecommender import P3alphaRecommender
 from GraphBased.RP3betaRecommender import RP3betaRecommender
 from MatrixFactorization.Cython.MatrixFactorization_Cython import MatrixFactorization_BPR_Cython, MatrixFactorization_FunkSVD_Cython
-from MatrixFactorization.PureSVDRecommender import PureSVDRecommender
+from MatrixFactorization.PureSVDRecommender import PureSVDRecommender, PureSVDItemRecommender
+from MatrixFactorization.NMFRecommender import NMFRecommender
 
 import traceback
 
@@ -26,7 +30,7 @@ from functools import partial
 from Data_manager.Movielens.Movielens10MReader import Movielens10MReader
 from Data_manager.split_functions.split_train_validation_random_holdout import split_train_in_two_percentage_global_sample
 
-from ParameterTuningCV.run_parameter_search_CV import runParameterSearch_Collaborative
+from ParameterTuningCV.run_parameter_search_CV import runParameterSearch_Collaborative, runParameterSearch_Content
 
 
 def read_data_split_and_search():
@@ -48,9 +52,11 @@ def read_data_split_and_search():
     URM_all = parser.get_URM_all()
     ICM_obj = parser.get_ICM_all()
 
-    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage = 0.80, seed = 1666)
-    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train, train_percentage = 0.80, seed = 1666)
+    URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage = 0.80, seed = seed)
+    URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_train, train_percentage = 0.80, seed = seed)
 
+    k = 5
+    
     output_folder_path = "result_experiments_CV/"
 
 
@@ -59,9 +65,11 @@ def read_data_split_and_search():
         os.makedirs(output_folder_path)
 
 
+    collaborative = True
 
-
-
+    content_algorithm_list= [
+        ItemKNNCBFRecommender
+    ]
 
 
     collaborative_algorithm_list = [
@@ -75,7 +83,8 @@ def read_data_split_and_search():
         MatrixFactorization_FunkSVD_Cython,
         PureSVDRecommender,
         SLIM_BPR_Cython,
-        SLIMElasticNetRecommender
+        SLIMElasticNetRecommender,
+        IALSRecommender,
     ]
 
 
@@ -84,26 +93,46 @@ def read_data_split_and_search():
     from Base.Evaluation.Evaluator import EvaluatorHoldout
 
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[5])
-    evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[5, 10])
+    evaluator_test = EvaluatorHoldout(URM_test, cutoff_list=[10])
 
+    if not collaborative:
+        runParameterSearch_Content_partial = partial(runParameterSearch_Content,
+                                                     URM_train=URM_train,
+                                                     ICM_object=ICM_obj,
+                                                     ICM_name='1BookFeatures',
+                                                     n_cases = 70,
+                                                     n_random_starts = 30,
+                                                     evaluator_validation= evaluator_valid_sub,
+                                                     evaluator_test = evaluator_valid_hybrid,
+                                                     metric_to_optimize = "MAP",
+                                                     output_folder_path=output_folder_path,
+                                                     parallelizeKNN = False,
+                                                     allow_weighting = True,
+                                                     #similarity_type_list = ['cosine']
+                                                     k = k,
+                                                     seed = seed
+                                                     )
 
-    runParameterSearch_Collaborative_partial = partial(runParameterSearch_Collaborative,
-                                                       URM_train = URM_train,
-                                                       metric_to_optimize = "MAP",
-                                                       n_cases = 10,
-                                                       evaluator_validation_earlystopping = evaluator_validation,
-                                                       evaluator_validation = evaluator_validation,
-                                                       evaluator_test = evaluator_test,
-                                                       output_folder_path = output_folder_path,
-                                                       similarity_type_list = ["cosine"],
-                                                       parallelizeKNN = False)
+        pool = multiprocessing.Pool(processes=int(multiprocessing.cpu_count()), maxtasksperchild=1)
+        pool.map(runParameterSearch_Content_partial, content_algorithm_list)
 
+    else:
+        runParameterSearch_Collaborative_partial = partial(runParameterSearch_Collaborative,
+                                                           URM_train = URM_train,
+                                                           metric_to_optimize = "MAP",
+                                                           n_cases = 70,
+                                                           n_random_starts = 30,
+                                                           evaluator_validation_earlystopping = evaluator_validation,
+                                                           evaluator_validation = evaluator_validation,
+                                                           evaluator_test = evaluator_test,
+                                                           output_folder_path = output_folder_path,
+                                                           #similarity_type_list = ["cosine"],
+                                                           parallelizeKNN = False,
+                                                           k = k,
+                                                           seed = seed)
 
-
-
-
-    pool = multiprocessing.Pool(processes=int(multiprocessing.cpu_count()), maxtasksperchild=1)
-    pool.map(runParameterSearch_Collaborative_partial, collaborative_algorithm_list)
+        pool = multiprocessing.Pool(processes=int(multiprocessing.cpu_count()), maxtasksperchild=1)
+        pool.map(runParameterSearch_Collaborative_partial, collaborative_algorithm_list)
 
     #
     #
