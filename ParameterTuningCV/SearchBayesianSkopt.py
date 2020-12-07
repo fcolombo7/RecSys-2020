@@ -19,12 +19,10 @@ class SearchBayesianSkopt(SearchAbstractClass):
 
     def __init__(self, recommender_class, URM_train, k = 5, seed = None, evaluator_test = None, verbose = True):
 
-        assert evaluator_validation is not None, "{}: evaluator_validation must be provided".format(self.ALGORITHM_NAME)
-
         super(SearchBayesianSkopt, self).__init__(recommender_class,
                                                   URM_train,
                                                   k = k,
-                                                  seed = seed
+                                                  seed = seed,
                                                   evaluator_test = evaluator_test,
                                                   verbose = verbose)
 
