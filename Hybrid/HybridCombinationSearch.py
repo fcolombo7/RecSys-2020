@@ -92,9 +92,9 @@ class HybridCombinationMergedSearch(BaseItemSimilarityMatrixRecommender):
                 f"{self.__rec3.RECOMMENDER_NAME}): similarities have different size, S1 is "
                 f"{self.__rec1.W_sparse.shape}, S2 is {self.__rec2.W_sparse.shape}, S3 is {self.__rec3.W_sparse.shape}")
 
-        self.__W1 = check_matrix(self.__rec1.W_sparse.copy(), 'csr')
-        self.__W2 = check_matrix(self.__rec2.W_sparse.copy(), 'csr')
-        self.__W3 = check_matrix(self.__rec3.W_sparse.copy(), 'csr')
+        #self.__W1 = check_matrix(self.__rec1.W_sparse.copy(), 'csr')
+        #self.__W2 = check_matrix(self.__rec2.W_sparse.copy(), 'csr')
+        #self.__W3 = check_matrix(self.__rec3.W_sparse.copy(), 'csr')
 
         self.__a = self.__b = self.__c = None
         self.topK=None
@@ -107,9 +107,21 @@ class HybridCombinationMergedSearch(BaseItemSimilarityMatrixRecommender):
         self.__c = 1 - self.__a - self.__b
         self.topK = topK
 
-        W = self.__W1 * self.__a \
-            + self.__W2 * self.__b \
-            + self.__W3 * self.__c
+        W1_max = self.__rec1.W_sparse.max()
+        W2_max = self.__rec2.W_sparse.max()
+        W3_max = self.__rec3.W_sparse.max()
+
+        W1 = self.__rec1.W_sparse
+        W2 = self.__rec2.W_sparse
+        W3 = self.__rec3.W_sparse
+        if W1_max != 0:
+            W1 = W1 / W1_max
+        if W2_max != 0:
+            W2 = W2 / W2_max
+        if W3_max != 0:
+            W3 = W3 / W3_max
+
+        W = W1 * self.__a + W2 * self.__b + W3 * self.__c
 
         self.W_sparse = similarityMatrixTopK(W, k=self.topK).tocsr()
 

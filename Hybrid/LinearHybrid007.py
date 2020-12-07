@@ -2,37 +2,30 @@ from Base.BaseSimilarityMatrixRecommender import BaseItemSimilarityMatrixRecomme
 from Base.DataIO import DataIO
 from GraphBased.P3alphaRecommender import P3alphaRecommender
 from GraphBased.RP3betaRecommender import RP3betaRecommender
-
-from KNN.ItemKNNCFRecommender import ItemKNNCFRecommender
 from KNN.UserKNNCFRecommender import UserKNNCFRecommender
+from SLIM_BPR.Cython.SLIM_BPR_Cython import SLIM_BPR_Cython
+
 from KNN.ItemKNNCBFRecommender import ItemKNNCBFRecommender
-from MatrixFactorization.IALSRecommender import IALSRecommender
+from SLIM_ElasticNet.SLIMElasticNetRecommender import SLIMElasticNetRecommender
 
 
-class LinearHybridC001(BaseItemSimilarityMatrixRecommender):
-    RECOMMENDER_NAME = "LinearHybridC001"
-    """
-    This hybrid works for users who have a profile length shorter or equal to 2 interactions
-    """
+class LinearHybrid007(BaseItemSimilarityMatrixRecommender):
+    RECOMMENDER_NAME = "LinearHybrid007"
+
     # set the seed equal to the one of the parameter search!!!!
     def __init__(self, URM_train, ICM_train, submission=False, verbose=True, seed=1205):
-        super(LinearHybridC001, self).__init__(URM_train, verbose = verbose)
+        super(LinearHybrid007, self).__init__(URM_train, verbose=verbose)
         self.URM_train = URM_train
         self.ICM_train = ICM_train
 
-        # seed 1205: {'num_factors': 83, 'confidence_scaling': 'linear', 'alpha': 28.4278070726612, 'epsilon':
-        # 1.0234211788885077, 'reg': 0.0027328110246575004, 'epochs': 20}
-        self.__rec1 = IALSRecommender(URM_train, verbose=False)
-        self.__rec1_params = {'num_factors': 83, 'confidence_scaling': 'linear', 'alpha': 28.4278070726612, 'epsilon': 1.0234211788885077, 'reg': 0.0027328110246575004, 'epochs': 15} #### -5!!
+        self.__rec1 = UserKNNCFRecommender(URM_train, verbose=False)
+        self.__rec1_params = {'topK': 190, 'shrink': 0, 'similarity': 'cosine', 'normalize': True}
 
-        # seed 1205: {'topK': 225, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting':
-        # 'BM25'}
         self.__rec2 = ItemKNNCBFRecommender(URM_train, ICM_train, verbose=False)
-        self.__rec2_params = {'topK': 225, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'}
+        self.__rec2_params = {'topK': 65, 'shrink': 0, 'similarity': 'dice', 'normalize': True}
 
-        # seed 1205: {'topK': 220, 'shrink': 175, 'similarity': 'cosine', 'normalize': False}
-        self.__rec3 = ItemKNNCFRecommender(URM_train, verbose=False)
-        self.__rec3_params = {'topK': 220, 'shrink': 175, 'similarity': 'cosine', 'normalize': False}
+        self.__rec3 = SLIMElasticNetRecommender(URM_train, verbose=False)
+        self.__rec3_params = {'topK': 992, 'l1_ratio': 0.004065081925341167, 'alpha': 0.003725005053334143}
 
         self.__a = self.__b = self.__c = None
         self.seed = seed
@@ -90,10 +83,10 @@ class LinearHybridC001(BaseItemSimilarityMatrixRecommender):
 
         return item_weights
 
-    def save_model(self, folder_path, file_name = None):
+    def save_model(self, folder_path, file_name=None):
         if file_name is None:
             file_name = self.RECOMMENDER_NAME
         self._print("Saving model in file '{}'".format(folder_path + file_name))
         dataIO = DataIO(folder_path=folder_path)
-        dataIO.save_data(file_name=file_name, data_dict_to_save = {})
+        dataIO.save_data(file_name=file_name, data_dict_to_save={})
         self._print("Saving complete")

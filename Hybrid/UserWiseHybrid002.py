@@ -21,7 +21,9 @@ class UserWiseHybrid002(BaseRecommender):
 
     def fit(self):
         for _, recommender, params in self.__recommender_segmentation:
+            print("Fitting "+recommender.RECOMMENDER_NAME)
             recommender.fit(**params)
+            print("Done.")
 
     def recommend(self, user_id_array, cutoff=None, remove_seen_flag=True, items_to_compute=None,
                   remove_top_pop_flag=False, remove_custom_items_flag=False, return_scores=False):
