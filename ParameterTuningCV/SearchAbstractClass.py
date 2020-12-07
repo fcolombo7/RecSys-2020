@@ -9,6 +9,8 @@ Created on 10/03/2018
 import time, os, traceback
 from Base.Incremental_Training_Early_Stopping import Incremental_Training_Early_Stopping
 import numpy as np
+import scipy.sparse as sps
+from sklearn.model_selection import KFold
 from Base.DataIO import DataIO
 from Base.Evaluation.Evaluator import EvaluatorHoldout
 
@@ -35,7 +37,7 @@ class SearchInputRecommenderArgs(object):
         if CONSTRUCTOR_KEYWORD_ARGS is None:
             CONSTRUCTOR_KEYWORD_ARGS = {}
 
-        if FIT_POSITIONAL_ARGS is None
+        if FIT_POSITIONAL_ARGS is None:
             FIT_POSITIONAL_ARGS = []
 
         if FIT_KEYWORD_ARGS is None:
@@ -114,7 +116,7 @@ class SearchAbstractClass(object):
     def __init__(self, recommender_class,
                  URM_train,
                  k = 5,
-                 seed = None,
+                 seed = 1205,
                  evaluator_test = None,
                  verbose = True):
 
@@ -131,14 +133,30 @@ class SearchAbstractClass(object):
         self.parameter_dictionary_best = {}
         
         self.URM_list = []
-        #k-fold
-        ...
-        
-        self.evalator_list = []
-        for URM in self.URM_list:
-            self.evaluator_list.append(EvaluatorHoldout(..., cutoff_list=[10])
+        self.URM_test_list = [] #aggiunta solo perchè ho il dubbio che ci sia bisogno di tenere referenziato l'oggetto da qualche parte
+        self.evaluator_list = []
 
-        #self.evaluator_validation = evaluator_validation
+        # k-fold
+        kf = KFold(n_splits=k, shuffle=True, random_state=self.seed)
+
+        shape = URM_train.shape
+        indptr = URM_train.indptr
+        indices = URM_train.indices
+        data = URM_train.data
+
+        for train_index, test_index in kf.split(data):
+            data_train = np.ones(data.shape)
+            data_test = np.ones(data.shape)
+            data_train[test_index] = 0
+            data_test[train_index] = 0
+            kf_train = sps.csr_matrix((data_train, indices, indptr), shape=shape).copy()
+            kf_test = sps.csr_matrix((data_test, indices, indptr), shape=shape).copy()
+            kf_train.eliminate_zeros()
+            kf_test.eliminate_zeros()
+            self.URM_list.append(kf_train)
+            self.URM_test_list.append(kf_test)
+            self.evaluator_list.append(EvaluatorHoldout(kf_test, cutoff_list=[10]))
+
 
         if evaluator_test is None:
             self.evaluator_test = None
@@ -260,7 +278,7 @@ class SearchAbstractClass(object):
         start_time = time.time()
 
         # Construct a new recommender instance
-        recommender_instance = self.recommender_class(URM_list[index], *self.recommender_input_args.CONSTRUCTOR_POSITIONAL_ARGS,
+        recommender_instance = self.recommender_class(self.URM_list[index], *self.recommender_input_args.CONSTRUCTOR_POSITIONAL_ARGS,
                                                       **self.recommender_input_args.CONSTRUCTOR_KEYWORD_ARGS)
 
 
@@ -380,7 +398,7 @@ class SearchAbstractClass(object):
             recommender_instance_list = []
             train_time_list = []
             evalation_time_list = []
-            for i in range(k):
+            for i in range(self.k):
                 result_dict_temp, result_string_temp, recommender_instance_temp, train_time_temp, evaluation_time_temp = self._evaluate_on_validation(current_fit_parameters_dict)
                 
                 result_dict_list.append(result_dict_temp)
@@ -391,9 +409,9 @@ class SearchAbstractClass(object):
             
 
                 # If the recommender uses Earlystopping, get the selected number of epochs
-                if isinstance(recommender_instance, Incremental_Training_Early_Stopping):
+                if isinstance(recommender_instance_temp, Incremental_Training_Early_Stopping):
 
-                    n_epochs_early_stopping_dict = recommender_instance.get_early_stopping_final_epochs_dict()
+                    n_epochs_early_stopping_dict = recommender_instance_temp.get_early_stopping_final_epochs_dict()
                     current_fit_parameters_dict = current_fit_parameters_dict.copy()
 
                     for epoch_label in n_epochs_early_stopping_dict.keys():
@@ -402,22 +420,22 @@ class SearchAbstractClass(object):
                         current_fit_parameters_dict[epoch_label] = epoch_value
             
             result_dict = {}                           
-            for key in result_dict_list[0]:
+            for key in result_dict_list[0].keys():
                 measure_sum = 0
-                for dic in resul_dict_list:
-                    measure_sum += dic(key)
+                for dic in result_dict_list:
+                    measure_sum += dic[key]
                 result_dict[key] = measure_sum/len(result_dict_list)
             
             result_string = get_result_string_evaluate_on_validation(result_dict, n_decimals=7)
             train_time = sum(train_time_list)/len(train_time_list)
-            evalation_time = sum(evalation_time_list)/len(evalation_time_list)
+            evaluation_time = sum(evalation_time_list)/len(evalation_time_list)
 
             current_result = - result_dict[self.metric_to_optimize]
 
             # Always save best model separately
-            if self.save_model in ["all"]:
-                self._print("{}: Saving model in {}\n".format(self.ALGORITHM_NAME, self.output_folder_path + self.output_file_name_root))
-                recommender_instance.save_model(self.output_folder_path, file_name = self.output_file_name_root + "_model_{}".format(self.model_counter))
+            #if self.save_model in ["all"]:
+            #    self._print("{}: Saving model in {}\n".format(self.ALGORITHM_NAME, self.output_folder_path + self.output_file_name_root))
+            #    recommender_instance.save_model(self.output_folder_path, file_name = self.output_file_name_root + "_model_{}".format(self.model_counter))
 
 
             if self.metadata_dict["result_on_validation_best"] is None:
@@ -434,13 +452,14 @@ class SearchAbstractClass(object):
                                                                                            current_fit_parameters_dict,
                                                                                            result_string))
 
-                if self.save_model in ["all", "best"]:
-                    self._print("{}: Saving model in {}\n".format(self.ALGORITHM_NAME, self.output_folder_path + self.output_file_name_root))
-                    recommender_instance.save_model(self.output_folder_path, file_name =self.output_file_name_root + "_best_model")
+                #if self.save_model in ["all", "best"]:
+                #    self._print("{}: Saving model in {}\n".format(self.ALGORITHM_NAME, self.output_folder_path + self.output_file_name_root))
+                #    recommender_instance.save_model(self.output_folder_path, file_name =self.output_file_name_root + "_best_model")
 
 
-                if self.evaluator_test is not None and self.evaluate_on_test_each_best_solution:
-                    result_dict_test, _, evaluation_test_time = self._evaluate_on_test(recommender_instance, current_fit_parameters_dict, print_log = True)
+                #if self.evaluator_test is not None and self.evaluate_on_test_each_best_solution:
+                #    for recommender_instance in recommender_instance_list:
+                #        result_dict_test_temp, _, evaluation_test_time = self._evaluate_on_test(recommender_instance, current_fit_parameters_dict, print_log = True)
 
 
             else:
@@ -473,13 +492,13 @@ class SearchAbstractClass(object):
                 self.metadata_dict["hyperparameters_best_index"] = self.model_counter
                 self.metadata_dict["result_on_validation_best"] = result_dict.copy()
 
-                if self.evaluator_test is not None and self.evaluate_on_test_each_best_solution:
-                    self.metadata_dict["result_on_test_best"] = result_dict_test.copy()
-                    self.metadata_dict["result_on_test_list"][self.model_counter] = result_dict_test.copy()
-                    self.metadata_dict["time_on_test_list"][self.model_counter] = evaluation_test_time
+                #if self.evaluator_test is not None and self.evaluate_on_test_each_best_solution:
+                #    self.metadata_dict["result_on_test_best"] = result_dict_test.copy()
+                #    self.metadata_dict["result_on_test_list"][self.model_counter] = result_dict_test.copy()
+                #    self.metadata_dict["time_on_test_list"][self.model_counter] = evaluation_test_time
 
-                    self.metadata_dict["time_on_test_total"], self.metadata_dict["time_on_test_avg"] = \
-                        _compute_avg_time_non_none_values(self.metadata_dict["time_on_test_list"])
+                #    self.metadata_dict["time_on_test_total"], self.metadata_dict["time_on_test_avg"] = \
+                #        _compute_avg_time_non_none_values(self.metadata_dict["time_on_test_list"])
 
 
         except (KeyboardInterrupt, SystemExit) as e:
