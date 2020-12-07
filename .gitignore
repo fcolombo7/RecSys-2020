@@ -1,8 +1,10 @@
 result_experiments/
 result_experiments_v2/
 # result_experiments_v3/
+result_experiments_v4/
 stored_recommenders/
 result_experiments_v3/**/*.zip
+result_experiments_CV/**/*.zip
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
