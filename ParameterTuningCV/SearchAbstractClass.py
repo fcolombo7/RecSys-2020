@@ -457,7 +457,7 @@ class SearchAbstractClass(object):
 
             if new_best_config_found:
 
-                self._write_log("{}: New best config found. Config {}: {} - results: {}\n".format(self.ALGORITHM_NAME,
+                self._write_log("\n{}: New best config found. Config {}: {} - results: {}\n".format(self.ALGORITHM_NAME,
                                                                                            self.model_counter,
                                                                                            current_fit_parameters_dict,
                                                                                            result_string))
