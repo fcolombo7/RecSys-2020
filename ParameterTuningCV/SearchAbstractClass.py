@@ -411,7 +411,7 @@ class SearchAbstractClass(object):
                 train_time_list.append(train_time_temp)
                 evalation_time_list.append(evaluation_time_temp)
             
-
+            for n, recommender_instance_temp in enumerate(recommender_instance_list):
                 # If the recommender uses Earlystopping, get the selected number of epochs
                 if isinstance(recommender_instance_temp, Incremental_Training_Early_Stopping):
 
@@ -421,7 +421,7 @@ class SearchAbstractClass(object):
                     for epoch_label in n_epochs_early_stopping_dict.keys():
 
                         epoch_value = n_epochs_early_stopping_dict[epoch_label]
-                        current_fit_parameters_dict[epoch_label] = epoch_value
+                        current_fit_parameters_dict[epoch_label + str(n)] = epoch_value
             
             result_dict = {}                           
             for key in result_dict_list[0].keys():
