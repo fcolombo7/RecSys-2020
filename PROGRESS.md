@@ -1,3 +1,28 @@
+#Cross-validation
+```
+seed = 1205
+# SPLIT TO GET TEST PARTITION
+URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage = 0.85, seed=seed)
+
+# SPLIT TO GET THE HYBRID VALID PARTITION
+URM_train, URM_valid_hybrid = split_train_in_two_percentage_global_sample(URM_train, train_percentage = 0.85, seed=seed)
+```
+## Sub-recommenders performance
+
+| Algorithm | MAP on **CV** | optimal parameters |
+| ------ | ------| ------|
+| ItemKNNCBF_jaccard | 0.0258054 | {'topK': 178, 'shrink': 100, 'similarity': 'jaccard', 'normalize': True}
+| ItemKNNCBF_dice | 0.0262233 | {'topK': 22, 'shrink': 59, 'similarity': 'dice', 'normalize': False}
+| ItemKNNCBF_tversky | 0.0262111 | {'topK': 282, 'shrink': 13, 'similarity': 'tversky', 'normalize': True, 'tversky_alpha': 1.1415654194011693, 'tversky_beta': 1.8776506336950853}
+| ItemKNNCF_asym | 0.0351144 | {'topK': 994, 'shrink': 981, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.05110465631417439, , 'feature_weighting': 'TF-IDF'}
+| ItemKNNCF_cosine | 0.0338102 | {'topK': 127, 'shrink': 345, 'similarity': 'cosine', 'normalize': False, 'feature_weighting': 'TF-IDF'}
+| UserKNNCF_asym | 0.0341739 | {'topK': 321, 'shrink': 914, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.4695015961698127, 'feature_weighting': 'TF-IDF'}
+| UserKNNCF_cosine | 0.0344068 | {'topK': 342, 'shrink': 1, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'none'}
+| UserKNNCF_jaccard | 0.0340966 | {'topK': 393, 'shrink': 18, 'similarity': 'jaccard', 'normalize': False}
+| UserKNNCF_dice | 0.0341211 |{'topK': 282, 'shrink': 8, 'similarity': 'dice', 'normalize': True}
+| RP3Beta | 0.0345242 | {'topK': 121, 'alpha': 0.20195468746532336, 'beta': 0.004377103282444673, 'normalize_similarity': False}
+| P3alpha | 0.0357172 | {'topK': 344, 'alpha': 0.4233795425391197, 'normalize_similarity': False}
+
 # New setup
 ```
 seed = 1205
@@ -90,7 +115,7 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 | Combined Recs | MAP on **validation_hybrid** | optimal parameters |
 | ------ | ------| ------|
 | ItemKNNCBF, ItemKNNCF, P3alpha | 0.0655122 | {'alpha': 0.9004575733942728, 'l1_ratio': 0.26510663025884135, 'topK': 888}
-| ItemKNNCBF, ItemKNNCF, RP3beta | 0.0648048 | {'alpha': 0.6299182764826382, 'l1_ratio': 0.9675762628242017, 'topK': 864} 
+| ItemKNNCBF, ItemKNNCF, RP3beta | 0.0648048 | {'alpha': 0.6299182764826382, 'l1_ratio': 0.9675762628242017, 'topK': 864}
 | ItemKNNCBF, ItemKNNCF, SLIM_EN | 0.0634502 | {'alpha': 0.3791657333411357, 'l1_ratio': 0.23126551664267164, 'topK': 990}
 | ItemKNNCBF, P3alpha, RP3beta | 0.0621390 | {'alpha': 0.6299182764826382, 'l1_ratio': 0.9675762628242017, 'topK': 864}
 | ItemKNNCBF, P3alpha, SLIM_EN | 0.0651354 | {'alpha': 0.9712321721669441, 'l1_ratio': 0.6879306727642494, 'topK': 990}
@@ -110,12 +135,12 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 | ItemKNNCBF, ItemKNNCF, SLIM_EN | 0.0617823 | {'alpha': 0.5011523958099686, 'l1_ratio': 0.6835202748204333}
 | ItemKNNCBF, ItemKNNCF, UserKNNCF | 0.0626716 | {'alpha': 0.23127746676269062, 'l1_ratio': 0.47037997538194565}
 | ItemKNNCBF, P3alpha, RP3beta | 0.0638838 | {'alpha': 0.32630431880229166, 'l1_ratio': 0.4598175570701317}
-| ItemKNNCBF, P3alpha, SLIM_BPR | 0.0638735 | {'alpha': 0.9966101776460795, 'l1_ratio': 0.24103276386735034} 
+| ItemKNNCBF, P3alpha, SLIM_BPR | 0.0638735 | {'alpha': 0.9966101776460795, 'l1_ratio': 0.24103276386735034}
 | ItemKNNCBF, P3alpha, SLIM_EN | 0.0639945 | {'alpha': 0.9678477202248401, 'l1_ratio': 0.26287752701640094}
 | ItemKNNCBF, RP3beta, SLIM_BPR | 0.0615707 | {'alpha': 0.7781420779249448, 'l1_ratio': 0.27134602211348197}
 | ItemKNNCBF, RP3beta, SLIM_EN | 0.0624512 | {'alpha': 0.7389620492322015, 'l1_ratio': 0.3355244273594045}
 | ItemKNNCBF, SLIM_EN, SLIM_BPR | 0.0623007 | {'alpha': 0.7753869940322178, 'l1_ratio': 0.4380906766055395}
-| ItemKNNCBF, UserKNNCF, P3alpha | 0.0647686 | {'alpha': 0.4840277797811048, 'l1_ratio': 0.356265002578487} 
+| ItemKNNCBF, UserKNNCF, P3alpha | 0.0647686 | {'alpha': 0.4840277797811048, 'l1_ratio': 0.356265002578487}
 | ItemKNNCBF, UserKNNCF, RP3beta | 0.0640256 | {'alpha': 0.39585017788453875, 'l1_ratio': 0.2969289208656836}
 | ItemKNNCBF, UserKNNCF, SLIM_BPR | 0.0615470 | {'alpha': 0.8170261573317669, 'l1_ratio': 0.20761151334998523}
 | ItemKNNCBF, UserKNNCF, SLIM_EN | 0.0625221 | {'alpha': 0.696288087190842, 'l1_ratio': 0.3051487184937027}
@@ -139,7 +164,7 @@ URM_train, URM_valid_sub = split_train_in_two_percentage_global_sample(URM_train
 | UserKNNCF, RP3beta, SLIM_EN | 0.0526332 | {'alpha': 0.9928115184812, 'l1_ratio': 0.4394977708983866}
 | UserKNNCF, RP3beta, SLIM_BPR | 0.0523734 | {'alpha': 0.9824185519731099, 'l1_ratio': 0.0049365500554859896}
 | UserKNNCF, SLIM_EN, SLIM_BPR | 0.0511976 | {'alpha': 0.9979141772440999, 'l1_ratio': 0.9695756615044695}
-| S-SLIM_EN, ItemKNNCBF, ItemKNNCF | 0.0662454 | {'alpha': 0.996772013761913, 'l1_ratio': 0.7831508517025596} 
+| S-SLIM_EN, ItemKNNCBF, ItemKNNCF | 0.0662454 | {'alpha': 0.996772013761913, 'l1_ratio': 0.7831508517025596}
 | S-SLIM_EN, ItemKNNCBF, UserKNNCF | 0.0672512 | {'alpha': 0.6461624491197696, 'l1_ratio': 0.7617220099582368}
 | S-SLIM_EN, ItemKNNCF, UserKNNCF | 0.0601189 | {'alpha': 0.6418228871731989, 'l1_ratio': 1.0}
 | S-SLIM_EN, P3alpha, ItemKNNCBF | 0.0664154 | {'alpha': 0.8416340030829476, 'l1_ratio': 0.6651408407090509}
