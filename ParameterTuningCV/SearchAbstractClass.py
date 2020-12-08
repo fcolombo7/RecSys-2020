@@ -312,6 +312,12 @@ class SearchAbstractClass(object):
 
         result_string = get_result_string_evaluate_on_validation(result_dict, n_decimals=7)
 
+        output_str = "> {} on FOLD-{}: {:.{n_decimals}f}\n".format(self.metric_to_optimize,
+                                                                   index,
+                                                                   result_dict[self.metric_to_optimize],
+                                                                   n_decimals=7)
+        self._print(output_str)
+
         return result_dict, result_string, recommender_instance, train_time, evaluation_time
 
 
