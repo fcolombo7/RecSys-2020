@@ -16,6 +16,7 @@ Created on 22/11/17
 from Base.NonPersonalizedRecommender import TopPop, Random, GlobalEffects
 
 # KNN
+from Hybrid.HybridCombinationSearchCV import HybridCombinationSearchCV
 from KNN.UserKNNCFRecommender import UserKNNCFRecommender
 from KNN.ItemKNNCFRecommender import ItemKNNCFRecommender
 from GraphBased.P3alphaRecommender import P3alphaRecommender
@@ -48,6 +49,8 @@ from KNN.ItemKNNCBFRecommender import ItemKNNCBFRecommender
 ######################################################################
 from skopt.space import Real, Integer, Categorical
 import traceback
+
+from SLIM_ElasticNet.SSLIM_ElasticNet import SSLIMElasticNet
 from Utils.PoolWithSubprocess import PoolWithSubprocess
 
 
@@ -152,7 +155,7 @@ def runParameterSearch_Content(recommender_class, URM_train, ICM_object, ICM_nam
 
 
     recommender_input_args = SearchInputRecommenderArgs(
-        CONSTRUCTOR_POSITIONAL_ARGS = [URM_train, ICM_object],
+        CONSTRUCTOR_POSITIONAL_ARGS = [ICM_object],
         CONSTRUCTOR_KEYWORD_ARGS = {},
         FIT_POSITIONAL_ARGS = [],
         FIT_KEYWORD_ARGS = {}
@@ -204,7 +207,7 @@ def runParameterSearch_Content(recommender_class, URM_train, ICM_object, ICM_nam
 
 def runParameterSearch_Collaborative(recommender_class,
                                      URM_train,
-                                     ICM_train=None,
+                                     ICM_train = None,
                                      URM_train_last_test = None,
                                      metric_to_optimize = "PRECISION",
                                      evaluator_test = None,
@@ -217,7 +220,9 @@ def runParameterSearch_Collaborative(recommender_class,
                                      allow_weighting = True,
                                      similarity_type_list = None,
                                      k = 5,
-                                     seed = None):
+                                     seed = None,
+                                     list_rec = None,
+                                     level = None):
 
 
 
@@ -241,7 +246,7 @@ def runParameterSearch_Collaborative(recommender_class,
 
         output_file_name_root = recommender_class.RECOMMENDER_NAME
 
-        parameterSearch = SearchBayesianSkopt(recommender_class, URM_train, k = k, seed = seed, evaluator_test=evaluator_test)
+        parameterSearch = SearchBayesianSkopt(recommender_class, URM_train, k = k, seed = seed, level=level, evaluator_test=evaluator_test)
 
 
 
@@ -548,8 +553,35 @@ def runParameterSearch_Collaborative(recommender_class,
                 FIT_KEYWORD_ARGS = {}
             )
 
+        ##########################################################################################################
 
+        if recommender_class is SSLIMElasticNet:
+            hyperparameters_range_dictionary = {}
+            hyperparameters_range_dictionary["beta"] = Real(low=0.2, high=0.8, prior='uniform')
+            hyperparameters_range_dictionary["topK"] = Integer(5, 1000)
+            hyperparameters_range_dictionary["l1_ratio"] = Real(low=1e-5, high=1.0, prior='log-uniform')
+            hyperparameters_range_dictionary["alpha"] = Real(low=1e-3, high=1.0, prior='uniform')
 
+            recommender_input_args = SearchInputRecommenderArgs(
+                CONSTRUCTOR_POSITIONAL_ARGS=[ICM_train],
+                CONSTRUCTOR_KEYWORD_ARGS={},
+                FIT_POSITIONAL_ARGS=[],
+                FIT_KEYWORD_ARGS={}
+            )
+
+        ##########################################################################################################
+
+        if recommender_class is HybridCombinationSearchCV:
+            hyperparameters_range_dictionary = {}
+            hyperparameters_range_dictionary["alpha"] = Real(low=0, high=1, prior='uniform')
+            hyperparameters_range_dictionary["l1_ratio"] = Real(low=0, high=1, prior='uniform')
+
+            recommender_input_args = SearchInputRecommenderArgs(
+                CONSTRUCTOR_POSITIONAL_ARGS=[ICM_train, list_rec],
+                CONSTRUCTOR_KEYWORD_ARGS={},
+                FIT_POSITIONAL_ARGS=[],
+                FIT_KEYWORD_ARGS={}
+            )
 
        #########################################################################################################
 
@@ -570,6 +602,7 @@ def runParameterSearch_Collaborative(recommender_class,
                                output_file_name_root = output_file_name_root,
                                metric_to_optimize = metric_to_optimize,
                                recommender_input_args_last_test = recommender_input_args_last_test)
+
 
 
 

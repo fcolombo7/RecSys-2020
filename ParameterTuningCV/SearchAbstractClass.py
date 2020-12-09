@@ -117,6 +117,7 @@ class SearchAbstractClass(object):
                  URM_train,
                  k = 5,
                  seed = 1666,
+                 level = None,
                  evaluator_test = None,
                  verbose = True):
 
@@ -128,6 +129,7 @@ class SearchAbstractClass(object):
         self.seed = seed
         self.verbose = verbose
         self.log_file = None
+        self.level = level
 
         self.results_test_best = {}
         self.parameter_dictionary_best = {}
@@ -278,7 +280,11 @@ class SearchAbstractClass(object):
         start_time = time.time()
 
         # Construct a new recommender instance
-        recommender_instance = self.recommender_class(self.URM_list[index], *self.recommender_input_args.CONSTRUCTOR_POSITIONAL_ARGS,
+        if self.level == 'hybrid_search':
+            recommender_instance = self.recommender_class(self.URM_list[index], self.seed, index, *self.recommender_input_args.CONSTRUCTOR_POSITIONAL_ARGS,
+                                                      **self.recommender_input_args.CONSTRUCTOR_KEYWORD_ARGS)
+        else:
+            recommender_instance = self.recommender_class(self.URM_list[index], *self.recommender_input_args.CONSTRUCTOR_POSITIONAL_ARGS,
                                                       **self.recommender_input_args.CONSTRUCTOR_KEYWORD_ARGS)
 
 

@@ -17,12 +17,13 @@ class SearchBayesianSkopt(SearchAbstractClass):
 
     ALGORITHM_NAME = "SearchBayesianSkopt-CV"
 
-    def __init__(self, recommender_class, URM_train, k = 5, seed = None, evaluator_test = None, verbose = True):
+    def __init__(self, recommender_class, URM_train, k = 5, seed = None, level = None, evaluator_test = None, verbose = True):
 
         super(SearchBayesianSkopt, self).__init__(recommender_class,
                                                   URM_train,
                                                   k = k,
                                                   seed = seed,
+                                                  level = level,
                                                   evaluator_test = evaluator_test,
                                                   verbose = verbose)
 
