@@ -68,7 +68,7 @@ class SSLIMElasticNet(BaseItemSimilarityMatrixRecommender):
                                 copy_X=False,
                                 precompute=True,
                                 selection='random',
-                                max_iter=600,#here we have increased the max iter
+                                max_iter=200, #here we have increased the max iter
                                 tol=1e-4)
 
         virtual_URM = check_matrix(self.virtual_URM, 'csc', dtype=np.float32)
