@@ -27,6 +27,7 @@ URM_train, URM_valid_hybrid = split_train_in_two_percentage_global_sample(URM_tr
 | ItemKNN_CBF_CF_dice | 0.0383243 | {'topK': 103, 'shrink': 996, 'similarity': 'dice', 'normalize': True, 'icm_weight': 19.882204659440184}
 | ItemKNN_CBF_CF_jaccard | 0.0382352 | {'topK': 100, 'shrink': 694, 'similarity': 'jaccard', 'normalize': False, 'icm_weight': 15.566263173944517}
 | ItemKNN_CBF_CF_twersky | - | *not ready*
+| SLIM_BPR | 0.0314483 | {'topK': 989, 'epochs': 1500, 'symmetric': False, 'sgd_mode': 'adam', 'lambda_i': 1.7432198130463203e-05, 'lambda_j': 0.0016819750046109673, 'learning_rate': 0.00031293205801039345, 'epochs0': 120, 'epochs1': 90, 'epochs2': 80, 'epochs3': 20, 'epochs4': 105}
 
 
 # New setup
