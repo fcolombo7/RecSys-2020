@@ -1,6 +1,6 @@
 #Cross-validation
 ```
-seed = 1205
+seed = 1666
 # SPLIT TO GET TEST PARTITION
 URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage = 0.85, seed=seed)
 
@@ -12,16 +12,22 @@ URM_train, URM_valid_hybrid = split_train_in_two_percentage_global_sample(URM_tr
 | Algorithm | MAP on **CV** | optimal parameters |
 | ------ | ------| ------|
 | ItemKNNCBF_jaccard | 0.0258054 | {'topK': 178, 'shrink': 100, 'similarity': 'jaccard', 'normalize': True}
-| ItemKNNCBF_dice | 0.0262233 | {'topK': 22, 'shrink': 59, 'similarity': 'dice', 'normalize': False}
+| **ItemKNNCBF_dice** | 0.0262233 | {'topK': 22, 'shrink': 59, 'similarity': 'dice', 'normalize': False}
 | ItemKNNCBF_tversky | 0.0262111 | {'topK': 282, 'shrink': 13, 'similarity': 'tversky', 'normalize': True, 'tversky_alpha': 1.1415654194011693, 'tversky_beta': 1.8776506336950853}
-| ItemKNNCF_asym | 0.0351144 | {'topK': 994, 'shrink': 981, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.05110465631417439, 'feature_weighting': 'TF-IDF'}
+| **ItemKNNCF_asym** | 0.0351144 | {'topK': 994, 'shrink': 981, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.05110465631417439, 'feature_weighting': 'TF-IDF'}
 | ItemKNNCF_cosine | 0.0338102 | {'topK': 127, 'shrink': 345, 'similarity': 'cosine', 'normalize': False, 'feature_weighting': 'TF-IDF'}
 | UserKNNCF_asym | 0.0341739 | {'topK': 321, 'shrink': 914, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.4695015961698127, 'feature_weighting': 'TF-IDF'}
-| UserKNNCF_cosine | 0.0344068 | {'topK': 342, 'shrink': 1, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'none'}
+| **UserKNNCF_cosine** | 0.0344068 | {'topK': 342, 'shrink': 1, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'none'}
 | UserKNNCF_jaccard | 0.0340966 | {'topK': 393, 'shrink': 18, 'similarity': 'jaccard', 'normalize': False}
 | UserKNNCF_dice | 0.0341211 |{'topK': 282, 'shrink': 8, 'similarity': 'dice', 'normalize': True}
-| RP3Beta | 0.0345242 | {'topK': 121, 'alpha': 0.20195468746532336, 'beta': 0.004377103282444673, 'normalize_similarity': False}
-| P3alpha | 0.0357172 | {'topK': 344, 'alpha': 0.4233795425391197, 'normalize_similarity': False}
+| **RP3Beta** | 0.0345242 | {'topK': 121, 'alpha': 0.20195468746532336, 'beta': 0.004377103282444673, 'normalize_similarity': False}
+| **P3alpha** | 0.0357172 | {'topK': 344, 'alpha': 0.4233795425391197, 'normalize_similarity': False}
+| **ItemKNN_CBF_CF_asym** | 0.0466542 | {'topK': 651, 'shrink': 858, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.01038549339003936, 'feature_weighting': 'TF-IDF', 'icm_weight': 1.0091171832447683}
+| ItemKNN_CBF_CF_cosine | 0.0449181 | {'topK': 1000, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'TF-IDF', 'icm_weight': 1.0}
+| ItemKNN_CBF_CF_dice | 0.0383243 | {'topK': 103, 'shrink': 996, 'similarity': 'dice', 'normalize': True, 'icm_weight': 19.882204659440184}
+| ItemKNN_CBF_CF_jaccard | 0.0382352 | {'topK': 100, 'shrink': 694, 'similarity': 'jaccard', 'normalize': False, 'icm_weight': 15.566263173944517}
+| ItemKNN_CBF_CF_twersky | - | *not ready*
+
 
 # New setup
 ```
