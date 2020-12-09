@@ -105,7 +105,7 @@ def read_data_split_and_search():
                                                                k = k,
                                                                seed = seed,
                                                                list_rec = rec_perm,
-                                                               level = 'hybrid')
+                                                               level = 'hybrid_search')
             pool = multiprocessing.Pool(processes=int(multiprocessing.cpu_count()), maxtasksperchild=1)
             pool.map(runParameterSearch_Collaborative_partial, collaborative_algorithm_list)
 
