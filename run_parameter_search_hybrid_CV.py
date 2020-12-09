@@ -39,7 +39,7 @@ from Data_manager.Movielens.Movielens10MReader import Movielens10MReader
 from Data_manager.split_functions.split_train_validation_random_holdout import \
     split_train_in_two_percentage_global_sample
 
-from ParameterTuningCV.my_run_parameter_search import runParameterSearch_Collaborative
+from ParameterTuningCV.run_parameter_search_CV import runParameterSearch_Collaborative
 
 
 def read_data_split_and_search():
@@ -73,7 +73,10 @@ def read_data_split_and_search():
 
     combo_algorithm_list = [
         (ItemKNNCBFRecommender, {'topK': 22, 'shrink': 59, 'similarity': 'dice', 'normalize': False}),
-        (ItemKNNCFRecommender, {'topK': 994, 'shrink': 981, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.05110465631417439, 'feature_weighting': 'TF-IDF'})
+        (ItemKNNCFRecommender, {'topK': 994, 'shrink': 981, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.05110465631417439, 'feature_weighting': 'TF-IDF'}),
+        (UserKNNCFRecommender, {'topK': 342, 'shrink': 1, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'none'}),
+        (RP3betaRecommender, {'topK': 121, 'alpha': 0.20195468746532336, 'beta': 0.004377103282444673, 'normalize_similarity': False}),
+        (P3alphaRecommender, {'topK': 344, 'alpha': 0.4233795425391197, 'normalize_similarity': False})
     ]
     list_already_seen = []
     combinations_already_seen = combinations(list_already_seen, 3)
