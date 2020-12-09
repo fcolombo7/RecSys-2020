@@ -14,7 +14,7 @@ URM_train, URM_valid_hybrid = split_train_in_two_percentage_global_sample(URM_tr
 | ItemKNNCBF_jaccard | 0.0258054 | {'topK': 178, 'shrink': 100, 'similarity': 'jaccard', 'normalize': True}
 | ItemKNNCBF_dice | 0.0262233 | {'topK': 22, 'shrink': 59, 'similarity': 'dice', 'normalize': False}
 | ItemKNNCBF_tversky | 0.0262111 | {'topK': 282, 'shrink': 13, 'similarity': 'tversky', 'normalize': True, 'tversky_alpha': 1.1415654194011693, 'tversky_beta': 1.8776506336950853}
-| ItemKNNCF_asym | 0.0351144 | {'topK': 994, 'shrink': 981, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.05110465631417439, , 'feature_weighting': 'TF-IDF'}
+| ItemKNNCF_asym | 0.0351144 | {'topK': 994, 'shrink': 981, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.05110465631417439, 'feature_weighting': 'TF-IDF'}
 | ItemKNNCF_cosine | 0.0338102 | {'topK': 127, 'shrink': 345, 'similarity': 'cosine', 'normalize': False, 'feature_weighting': 'TF-IDF'}
 | UserKNNCF_asym | 0.0341739 | {'topK': 321, 'shrink': 914, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.4695015961698127, 'feature_weighting': 'TF-IDF'}
 | UserKNNCF_cosine | 0.0344068 | {'topK': 342, 'shrink': 1, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'none'}
