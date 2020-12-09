@@ -281,8 +281,11 @@ class SearchAbstractClass(object):
 
         # Construct a new recommender instance
         if self.level == 'hybrid_search':
-            recommender_instance = self.recommender_class(self.URM_list[index], self.seed, index, *self.recommender_input_args.CONSTRUCTOR_POSITIONAL_ARGS,
-                                                      **self.recommender_input_args.CONSTRUCTOR_KEYWORD_ARGS)
+            dict_keywords = self.recommender_input_args.CONSTRUCTOR_KEYWORD_ARGS.copy()
+            dict_keywords['seed'] = self.seed
+            dict_keywords['fold'] = index
+            recommender_instance = self.recommender_class(self.URM_list[index], *self.recommender_input_args.CONSTRUCTOR_POSITIONAL_ARGS,
+                                                      **dict_keywords)
         else:
             recommender_instance = self.recommender_class(self.URM_list[index], *self.recommender_input_args.CONSTRUCTOR_POSITIONAL_ARGS,
                                                       **self.recommender_input_args.CONSTRUCTOR_KEYWORD_ARGS)

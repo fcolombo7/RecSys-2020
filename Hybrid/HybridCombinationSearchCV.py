@@ -25,13 +25,16 @@ class HybridCombinationSearchCV(BaseItemSimilarityMatrixRecommender):
     RECOMMENDER_NAME = "HybridCombinationSearchCV"
 
     # set the seed equal to the one of the parameter search!!!!
-    def __init__(self, URM_train, ICM_train, seed, fold, list_rec, verbose=True):
+    def __init__(self, URM_train, ICM_train, list_rec, seed=None, fold=None,  verbose=True):
         """
         :params list_rec è una lista composta da (RecommenderClass, **fit_keywargs)
         """
+        assert seed is not None and fold is not None
+
         super(HybridCombinationSearchCV, self).__init__(URM_train, verbose=verbose)
         self.URM_train = URM_train
         self.ICM_train = ICM_train
+
         self.seed = seed
         self.fold = fold
         self.list_rec = list_rec
