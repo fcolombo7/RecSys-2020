@@ -134,3 +134,10 @@ class DataParser(object):
         print(f"Warning: the URM_test filtered in {filter_range} has {nnz_new} of {nnz_old} total users in the original URM_test. ({fraction})")
 
         return partial_urm_test
+
+    def get_Special_ICM_all(self):
+        num_features = max(self.__icm_frame.feature_id.to_list()) + 1
+        num_items = max(self.__icm_frame.item_id.to_list()) + 1
+        icm_shape = (num_items, num_features)
+        icm_all = sp.csr_matrix((self.__icm_frame.item_id.to_list(), (self.__icm_frame.item_id.to_list(), self.__icm_frame.feature_id.to_list())), shape=icm_shape)
+        return icm_all
