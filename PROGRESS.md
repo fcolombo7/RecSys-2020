@@ -11,10 +11,10 @@ URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train
 | ItemKNNCBF            | 0.0294841 | {'topK': 164, 'shrink': 8, 'similarity': 'jaccard', 'normalize': True}
 | ItemKNNCBF_Special    | 0.0318313 | {'topK': 1000, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'}
 | ItemKNN_CBF_CF        | 0.0566790 | {'topK': 1000, 'shrink': 1000, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.241892724784089, 'feature_weighting': 'TF-IDF', 'icm_weight': 1.0}
-| ItemKNNCF             | - | *to be added*
-| UserKNNCF             | - | *to be added*
-| RP3Beta               | - | *to be added*
-| P3alpha               | - | *to be added*
+| ItemKNNCF             |  0.0441588 | {'topK': 1000, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'TF-IDF'}
+| UserKNNCF             | 0.0442522 | {'topK': 163, 'shrink': 846, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'TF-IDF'}
+| RP3Beta               | 0.0469976 | {'topK': 926, 'alpha': 0.4300109351916609, 'beta': 0.01807360750913967, 'normalize_similarity': False}
+| P3alpha               | 0.0462770 | {'topK': 575, 'alpha': 0.48009885897470206, 'normalize_similarity': False}
 | SLIM_BPR              | - | *to be added*
 | S-SLIM                | - | *to be added*
 
