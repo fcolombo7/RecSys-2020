@@ -18,6 +18,14 @@ URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train
 | SLIM_BPR              | - | *to be added*
 | S-SLIM                | - | *to be added*
 
+## hybrid 
+
+| Algorithm | MAP w/ **CV** | optimal parameters |
+| ------ | ------| ------|
+| ItemKNNCBF-ItemKNN_CBF_CF-ItemKNNCF   | 0.0723551 | {'alpha': 0.9457062373092435, 'l1_ratio': 0.08675668683308081}
+| ItemKNNCBF-ItemKNN_CBF_CF-P3alpha     | 0.0733132 | {'alpha': 0.6904008032335807, 'l1_ratio': 0.23371348584724985}
+| ItemKNNCBF-ItemKNN_CBF_CF-RP3beta     | 0.0732289 | {'alpha': 0.8129428861277737, 'l1_ratio': 0.14069122456123387}
+| ItemKNNCBF-ItemKNN_CBF_CF-UserKNNCF   | 0.0732549 | {'alpha': 0.8129428861277737, 'l1_ratio': 0.14069122456123387} 
 
 ---
 #Cross-validation
