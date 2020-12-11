@@ -16,11 +16,14 @@ from Hybrid.LinearHybrid001 import LinearHybrid001
 from Hybrid.MergedHybrid000 import MergedHybrid000
 from Hybrid.PipeHybrid001 import PipeHybrid001
 from KNN.ItemKNNCBFRecommender import ItemKNNCBFRecommender
+from KNN.ItemKNN_CBF_CF import ItemKNN_CBF_CF
+from KNN.SpecialItemKNNCBFRecommender import SpecialItemKNNCBFRecommender
 from KNN.UserKNNCFRecommender import UserKNNCFRecommender
 from KNN.ItemKNNCFRecommender import ItemKNNCFRecommender
 from KNN.ItemKNN_CBF_CF import ItemKNN_CBF_CF
 from MatrixFactorization.IALSRecommender import IALSRecommender
 from SLIM_BPR.Cython.SLIM_BPR_Cython import SLIM_BPR_Cython
+from SLIM_ElasticNet.SSLIM_ElasticNet import SSLIMElasticNet
 from SLIM_ElasticNet.SLIMElasticNetRecommender import SLIMElasticNetRecommender
 from GraphBased.P3alphaRecommender import P3alphaRecommender
 from GraphBased.RP3betaRecommender import RP3betaRecommender
@@ -73,7 +76,7 @@ def read_data_split_and_search():
     from Base.Evaluation.Evaluator import EvaluatorHoldout
 
     icb = (ItemKNNCBFRecommender), {'topK': 164, 'shrink': 8, 'similarity': 'jaccard', 'normalize': True}
-    icbsup = (ItemKNNCBF_Special), {'topK': 1000, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'}
+    icbsup = (SpecialItemKNNCBFRecommender), {'topK': 1000, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'}
     icbcf = (ItemKNN_CBF_CF), {'topK': 1000, 'shrink': 1000, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.241892724784089, 'feature_weighting': 'TF-IDF', 'icm_weight': 1.0}
     icf = (ItemKNNCFRecommender), {'topK': 1000, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'TF-IDF'}
     ucf = (UserKNNCFRecommender), {'topK': 163, 'shrink': 846, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'TF-IDF'}
