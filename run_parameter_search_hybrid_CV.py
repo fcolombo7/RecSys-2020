@@ -90,14 +90,14 @@ def read_data_split_and_search():
     """
     combination_to_be_done = list(combinations(combo_algorithm_list, 3))
 
-    for rec_perm in combination_to_be_done[]:
+    for rec_perm in combination_to_be_done[:15]:
 
         if rec_perm not in combinations_already_seen:
             recommender_names = '_'.join([r[0].RECOMMENDER_NAME for r in rec_perm])
             output_folder_path = "result_experiments_CV2/seed_" + str(seed) + '/linear/' + recommender_names + '/'
             print(F"\nTESTING THE COMBO {recommender_names}")
 
-            if (ItemKNNCBFRecommender not in rec_perm) and (ItemKNNCBF_Special not in rec_perm) and (ItemKNN_CBF_CF not in rec_perm):
+            if (ItemKNNCBFRecommender not in rec_perm) and (ItemKNNCBF_Special not in rec_perm) and (ItemKNN_CBF_CF not in rec_perm) or (ItemKNNCBFRecommender in rec_perm and ItemKNNCBF_Special in rec_perm):
                 # If directory does not exist, create
                 if not os.path.exists(output_folder_path):
                     os.makedirs(output_folder_path)
