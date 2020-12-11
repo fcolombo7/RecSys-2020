@@ -72,16 +72,23 @@ def read_data_split_and_search():
 
     from Base.Evaluation.Evaluator import EvaluatorHoldout
 
-    combo_algorithm_list = [
-        (ItemKNNCBFRecommender), {'topK': 164, 'shrink': 8, 'similarity': 'jaccard', 'normalize': True}
-        (ItemKNNCBF_Special), {'topK': 1000, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'},
-        (ItemKNN_CBF_CF), {'topK': 1000, 'shrink': 1000, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.241892724784089, 'feature_weighting': 'TF-IDF', 'icm_weight': 1.0},
-        (ItemKNNCFRecommender), {'topK': 1000, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'TF-IDF'},
-        (UserKNNCFRecommender), {'topK': 163, 'shrink': 846, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'TF-IDF'},
-        (RP3betaRecommender), {'topK': 926, 'alpha': 0.4300109351916609, 'beta': 0.01807360750913967, 'normalize_similarity': False},
-        (P3alphaRecommender), {'topK': 575, 'alpha': 0.48009885897470206, 'normalize_similarity': False},
-        #(SLIM_BPR_Cython, {'topK': 989, 'epochs': 90, 'symmetric': False, 'sgd_mode': 'adam', 'lambda_i': 1.7432198130463203e-05, 'lambda_j': 0.0016819750046109673, 'learning_rate': 0.00031293205801039345})
-    ]
+    icb = (ItemKNNCBFRecommender), {'topK': 164, 'shrink': 8, 'similarity': 'jaccard', 'normalize': True}
+    icbsup = (ItemKNNCBF_Special), {'topK': 1000, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'}
+    icbcf = (ItemKNN_CBF_CF), {'topK': 1000, 'shrink': 1000, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.241892724784089, 'feature_weighting': 'TF-IDF', 'icm_weight': 1.0}
+    icf = (ItemKNNCFRecommender), {'topK': 1000, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'TF-IDF'}
+    ucf = (UserKNNCFRecommender), {'topK': 163, 'shrink': 846, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'TF-IDF'}
+    p3a = (RP3betaRecommender), {'topK': 926, 'alpha': 0.4300109351916609, 'beta': 0.01807360750913967, 'normalize_similarity': False}
+    rp3b = (P3alphaRecommender), {'topK': 575, 'alpha': 0.48009885897470206, 'normalize_similarity': False}
+    #(SLIM_BPR_Cython, {'topK': 989, 'epochs': 90, 'symmetric': False, 'sgd_mode': 'adam', 'lambda_i': 1.7432198130463203e-05, 'lambda_j': 0.0016819750046109673, 'learning_rate': 0.00031293205801039345})
+
+    combo_algorithm_list = [icb,
+                            icbsup,
+                            icbcf,
+                            icf,
+                            ucf,
+                            p3a,
+                            rp3b,
+                            ]
     list_already_seen = []
     combinations_already_seen = combinations(list_already_seen, 3)
     """
@@ -97,7 +104,7 @@ def read_data_split_and_search():
             output_folder_path = "result_experiments_CV2/seed_" + str(seed) + '/linear/' + recommender_names + '/'
             print(F"\nTESTING THE COMBO {recommender_names}")
 
-            if (ItemKNNCBFRecommender not in rec_perm) and (ItemKNNCBF_Special not in rec_perm) and (ItemKNN_CBF_CF not in rec_perm) or (ItemKNNCBFRecommender in rec_perm and ItemKNNCBF_Special in rec_perm):
+            if ((icb in rec_perm) or (icbsup in rec_perm) or (icbcf in rec_perm)) and not((icb in rec_perm) and (icbsup in rec_perm)):
                 # If directory does not exist, create
                 if not os.path.exists(output_folder_path):
                     os.makedirs(output_folder_path)
