@@ -1,3 +1,25 @@
+#Cross-validation v.2
+```
+seed = 1666
+# SPLIT ---- only one!
+URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train_percentage = 0.85, seed=seed)
+```
+## Single-recommender performance
+
+| Algorithm | MAP w/ **CV** | optimal parameters |
+| ------ | ------| ------|
+| ItemKNNCBF            | 0.0294841 | {'topK': 164, 'shrink': 8, 'similarity': 'jaccard', 'normalize': True}
+| ItemKNNCBF_Special    | 0.0318313 | {'topK': 1000, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'}
+| ItemKNN_CBF_CF        | 0.0566790 | {'topK': 1000, 'shrink': 1000, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.241892724784089, 'feature_weighting': 'TF-IDF', 'icm_weight': 1.0}
+| ItemKNNCF             | - | *to be added*
+| UserKNNCF             | - | *to be added*
+| RP3Beta               | - | *to be added*
+| P3alpha               | - | *to be added*
+| SLIM_BPR              | - | *to be added*
+| S-SLIM                | - | *to be added*
+
+
+---
 #Cross-validation
 ```
 seed = 1666
