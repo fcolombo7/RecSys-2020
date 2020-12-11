@@ -15,17 +15,17 @@ URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train
 | UserKNNCF             | 0.0442522 | {'topK': 163, 'shrink': 846, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'TF-IDF'}
 | RP3Beta               | 0.0469976 | {'topK': 926, 'alpha': 0.4300109351916609, 'beta': 0.01807360750913967, 'normalize_similarity': False}
 | P3alpha               | 0.0462770 | {'topK': 575, 'alpha': 0.48009885897470206, 'normalize_similarity': False}
-| SLIM_BPR              | - | *to be added*
+| SLIM_BPR              | 0.0408258 | {'topK': 1000, 'epochs': 1500, 'symmetric': False, 'sgd_mode': 'adam', 'lambda_i': 1e-05, 'lambda_j': 1e-05, 'learning_rate': 0.0001, 'epochs0': 100, 'epochs1': 160, 'epochs2': 175, 'epochs3': 90, 'epochs4': 60}
 | S-SLIM                | - | *to be added*
 
-## hybrid 
+## hybrid
 
 | Algorithm | MAP w/ **CV** | optimal parameters |
 | ------ | ------| ------|
 | ItemKNNCBF-ItemKNN_CBF_CF-ItemKNNCF   | 0.0723551 | {'alpha': 0.9457062373092435, 'l1_ratio': 0.08675668683308081}
 | ItemKNNCBF-ItemKNN_CBF_CF-P3alpha     | 0.0733132 | {'alpha': 0.6904008032335807, 'l1_ratio': 0.23371348584724985}
 | ItemKNNCBF-ItemKNN_CBF_CF-RP3beta     | 0.0732289 | {'alpha': 0.8129428861277737, 'l1_ratio': 0.14069122456123387}
-| ItemKNNCBF-ItemKNN_CBF_CF-UserKNNCF   | 0.0732549 | {'alpha': 0.8129428861277737, 'l1_ratio': 0.14069122456123387} 
+| ItemKNNCBF-ItemKNN_CBF_CF-UserKNNCF   | 0.0732549 | {'alpha': 0.8129428861277737, 'l1_ratio': 0.14069122456123387}
 
 ---
 #Cross-validation
