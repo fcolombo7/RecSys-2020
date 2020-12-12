@@ -16,7 +16,7 @@ URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train
 | RP3Beta               | 0.0469976 | {'topK': 926, 'alpha': 0.4300109351916609, 'beta': 0.01807360750913967, 'normalize_similarity': False}
 | P3alpha               | 0.0462770 | {'topK': 575, 'alpha': 0.48009885897470206, 'normalize_similarity': False}
 | SLIM_BPR              | 0.0408258 | {'topK': 1000, 'epochs': 1500, 'symmetric': False, 'sgd_mode': 'adam', 'lambda_i': 1e-05, 'lambda_j': 1e-05, 'learning_rate': 0.0001, 'epochs0': 100, 'epochs1': 160, 'epochs2': 175, 'epochs3': 90, 'epochs4': 60}
-| S-SLIM                | - | *to be added*
+| S-SLIM                | 0.0509633 | {'beta': 0.567288665094892, 'topK': 1000, 'l1_ratio': 1e-05, 'alpha': 0.001} - *not finished*
 | PureSVD               | 0.0229563 | {'num_factors': 350}
 
 ## hybrid
