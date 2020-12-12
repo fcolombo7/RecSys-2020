@@ -102,7 +102,7 @@ class HybridSuperLinear(BaseItemSimilarityMatrixRecommender):
         self.__a = self.__b = self.__c = self.__d = self.__e = self.__f = self.__g = self.__h = self.i = None
         self.seed=seed
 
-    def fit(self, a, b, c, d, e, f, g, h, norm = True):
+    def fit(self, a, b, c, d, e, f, g, h, i, norm = True):
 
         #load the models if already trained for that particular seed and fold
         try:
