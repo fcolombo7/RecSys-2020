@@ -10,6 +10,7 @@ from Base.NonPersonalizedRecommender import TopPop, Random
 from EASE_R.EASE_R_Recommender import EASE_R_Recommender
 from Hybrid.HybridCombinationSearch import HybridCombinationSearch, HybridCombinationMergedSearch
 from Hybrid.HybridCombinationSearchCV import HybridCombinationSearchCV
+from Hybrid.HybridSuperLinear import HybridSuperLinear
 from Hybrid.LinearHybrid002ggg import LinearHybrid002ggg
 from Hybrid.LinearHybrid002 import LinearHybrid002
 from Hybrid.LinearHybrid001 import LinearHybrid001
@@ -71,6 +72,7 @@ def read_data_split_and_search():
 
     collaborative_algorithm_list = [
         HybridCombinationSearchCV
+        #HybridSuperLinear
     ]
 
     from Base.Evaluation.Evaluator import EvaluatorHoldout
@@ -82,7 +84,8 @@ def read_data_split_and_search():
     ucf = (UserKNNCFRecommender), {'topK': 163, 'shrink': 846, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'TF-IDF'}
     p3a = (RP3betaRecommender), {'topK': 926, 'alpha': 0.4300109351916609, 'beta': 0.01807360750913967, 'normalize_similarity': False}
     rp3b = (P3alphaRecommender), {'topK': 575, 'alpha': 0.48009885897470206, 'normalize_similarity': False}
-    #(SLIM_BPR_Cython, {'topK': 989, 'epochs': 90, 'symmetric': False, 'sgd_mode': 'adam', 'lambda_i': 1.7432198130463203e-05, 'lambda_j': 0.0016819750046109673, 'learning_rate': 0.00031293205801039345})
+    sbpr = (SLIM_BPR_Cython, {'topK': 1000, 'epochs': 130, 'symmetric': False, 'sgd_mode': 'adam', 'lambda_i': 1e-05, 'lambda_j': 1e-05, 'learning_rate': 0.0001})
+    sslim = (SSLIMElasticNet, {'beta': 0.567288665094892, 'topK': 1000, 'l1_ratio': 1e-05, 'alpha': 0.001})
 
     combo_algorithm_list = [icb,
                             icbsup,
@@ -91,6 +94,8 @@ def read_data_split_and_search():
                             ucf,
                             p3a,
                             rp3b,
+                            sbpr,
+                            sslim
                             ]
     list_already_seen = []
     combinations_already_seen = combinations(list_already_seen, 3)
@@ -100,14 +105,14 @@ def read_data_split_and_search():
     """
     combination_to_be_done = list(combinations(combo_algorithm_list, 3))
 
-    for rec_perm in combination_to_be_done[:15]:
+    for rec_perm in combination_to_be_done:
 
         if rec_perm not in combinations_already_seen:
             recommender_names = '_'.join([r[0].RECOMMENDER_NAME for r in rec_perm])
             output_folder_path = "result_experiments_CV2/seed_" + str(seed) + '/linear/' + recommender_names + '/'
             print(F"\nTESTING THE COMBO {recommender_names}")
 
-            if ((icb in rec_perm) or (icbsup in rec_perm) or (icbcf in rec_perm)) and not((icb in rec_perm) and (icbsup in rec_perm)):
+            if ((icb in rec_perm) or (icbsup in rec_perm)) and not((icb in rec_perm) and (icbsup in rec_perm)):
                 # If directory does not exist, create
                 if not os.path.exists(output_folder_path):
                     os.makedirs(output_folder_path)
