@@ -17,6 +17,7 @@ URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train
 | P3alpha               | 0.0462770 | {'topK': 575, 'alpha': 0.48009885897470206, 'normalize_similarity': False}
 | SLIM_BPR              | 0.0408258 | {'topK': 1000, 'epochs': 1500, 'symmetric': False, 'sgd_mode': 'adam', 'lambda_i': 1e-05, 'lambda_j': 1e-05, 'learning_rate': 0.0001, 'epochs0': 100, 'epochs1': 160, 'epochs2': 175, 'epochs3': 90, 'epochs4': 60}
 | S-SLIM                | - | *to be added*
+| PureSVD               | 0.0229563 | {'num_factors': 350}
 
 ## hybrid
 
@@ -26,6 +27,7 @@ URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train
 | ItemKNNCBF-ItemKNN_CBF_CF-P3alpha         | 0.0733132 | {'alpha': 0.6904008032335807, 'l1_ratio': 0.23371348584724985}
 | ItemKNNCBF-ItemKNN_CBF_CF-RP3beta         | 0.0732289 | {'alpha': 0.8129428861277737, 'l1_ratio': 0.14069122456123387}
 | ItemKNNCBF-ItemKNN_CBF_CF-UserKNNCF       | 0.0732549 | {'alpha': 0.8129428861277737, 'l1_ratio': 0.14069122456123387}
+| ItemKNNCBF-ItemKNN_CBF_CF-Slim_BPR        | 0.0736289 | {'alpha': 0.8991751672246813, 'l1_ratio': 0.11874637825106651}
 | ItemKNNCBF-ItemKNNCF-P3alpha              | 0.0705969 | {'alpha': 0.44569420382449637, 'l1_ratio': 0.6168742754254437}
 | ItemKNNCBF-ItemKNNCF-RP3beta              | 0.0704951 | {'alpha': 0.3033751201293658, 'l1_ratio': 0.7822655054333012}
 | ItemKNNCBF-ItemKNNCF-UserKNNCF            | 0.0700526 | {'alpha': 0.48973465405541533, 'l1_ratio': 0.3567553681370489}
@@ -36,12 +38,15 @@ URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train
 | Special_KNNCBF-ItemKNN_CBF_CF-P3alpha     | 0.0739867 | {'alpha': 0.6094679138906033, 'l1_ratio': 0.41715098578193194}
 | Special_KNNCBF-ItemKNN_CBF_CF-RP3beta     | 0.0736200 | {'alpha': 0.5369911284211629, 'l1_ratio': 0.45078644454282}
 | Special_KNNCBF-ItemKNN_CBF_CF-UserKNNCF   | 0.0729346 | {'alpha': 0.7020854096807992, 'l1_ratio': 0.20749665943340362}
+| Special_KNNCBF-ItemKNN_CBF_CF-Slim_BPR    | 0.0739889 | {'alpha': 0.7949204415356104, 'l1_ratio': 0.2705694962114903}
 | Special_KNNCBF-ItemKNNCF-P3alpha          | 0.0729078 | {'alpha': 0.4973334775913678, 'l1_ratio': 0.6790274919219236}
 | Special_KNNCBF-ItemKNNCF-RP3beta **!!!**  | 0.0724929 | {'alpha': 0.45931982254221104, 'l1_ratio': 0.552400663560699}
 | Special_KNNCBF-ItemKNNCF-UserKNNCF        | 0.0718252 | {'alpha': 0.5934342246244017, 'l1_ratio': 0.38793882442583466}
+| Special_KNNCBF-ItemKNNCF-Slim_BPR         | 0.0723958 | {'alpha': 0.8170119826252383, 'l1_ratio': 0.33586027250410305}
 | Special_KNNCBF-RP3beta-P3alpha            | 0.0729609 | {'alpha': 0.4001101186128191, 'l1_ratio': 0.9989082076640393}
 | Special_KNNCBF-UserKNNCF-P3alpha          | 0.0732810 | {'alpha': 0.627349023025726, 'l1_ratio': 0.5343474311262314}
 | Special_KNNCBF-UserKNNCF-RP3beta          | 0.0730215 | {'alpha': 0.5574853559798421, 'l1_ratio': 0.5221328226891215}
+| Special_KNNCBF-UserKNNCF-Slim_BPR         | 0.0726270 | {'alpha': 0.9033873534648698, 'l1_ratio': 0.30678626017844307}
 | ItemKNN_CBF_CF-ItemKNNCF-P3alpha          | 0.0700128 | {'alpha': 0.9849245373595942, 'l1_ratio': 0.9961549824044795}
 | ItemKNN_CBF_CF-ItemKNNCF-RP3beta          | 0.0700284 | {'alpha': 0.9960369080995459, 'l1_ratio': 0.9991666164394999}
 | ItemKNN_CBF_CF-ItemKNNCF-UserKNNCF        | 0.0700190 | {'alpha': 0.9978504378244369, 'l1_ratio': 0.9989504324961238}
