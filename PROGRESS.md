@@ -28,30 +28,39 @@ URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train
 | ItemKNNCBF-ItemKNN_CBF_CF-RP3beta         | 0.0732289 | {'alpha': 0.8129428861277737, 'l1_ratio': 0.14069122456123387}
 | ItemKNNCBF-ItemKNN_CBF_CF-UserKNNCF       | 0.0732549 | {'alpha': 0.8129428861277737, 'l1_ratio': 0.14069122456123387}
 | ItemKNNCBF-ItemKNN_CBF_CF-Slim_BPR        | 0.0736289 | {'alpha': 0.8991751672246813, 'l1_ratio': 0.11874637825106651}
+| ItemKNNCBF-ItemKNN_CBF_CF-S-SLIM          | 0.0721545 | {'alpha': 0.7275055738435442, 'l1_ratio': 0.2694727916070659}
 | ItemKNNCBF-ItemKNNCF-P3alpha              | 0.0705969 | {'alpha': 0.44569420382449637, 'l1_ratio': 0.6168742754254437}
 | ItemKNNCBF-ItemKNNCF-RP3beta              | 0.0704951 | {'alpha': 0.3033751201293658, 'l1_ratio': 0.7822655054333012}
 | ItemKNNCBF-ItemKNNCF-UserKNNCF            | 0.0700526 | {'alpha': 0.48973465405541533, 'l1_ratio': 0.3567553681370489}
 | ItemKNNCBF-RP3beta-P3alpha                | 0.0703646 | {'alpha': 0.6171935935379741, 'l1_ratio': 0.4090970817953153}
+| ItemKNNCBF-RP3beta-S-SLIM                 | 0.0718233 | {'alpha': 0.7861575718386372, 'l1_ratio': 0.34264216397962627}
+| ItemKNNCBF-P3alpha-S-SLIM                 | 0.0719968 | {'alpha': 0.6325200648079097, 'l1_ratio': 0.4685932097360991}
 | ItemKNNCBF-UserKNNCF-P3alpha              | 0.0711359 | {'alpha': 0.6310254748569911, 'l1_ratio': 0.42318219644561506}
 | ItemKNNCBF-UserKNNCF-RP3beta              | 0.0710556 | {'alpha': 0.5388201552532741, 'l1_ratio': 0.35597718538152645}
+| ItemKNNCBF-Slim_BPR_S-SLIM                | 0.0726098 | {'alpha': 0.5238332406148302, 'l1_ratio': 0.5907932058981844}
 | Special_KNNCBF-ItemKNN_CBF_CF-ItemKNNCF   | 0.0720238 | {'alpha': 0.8122492419947548, 'l1_ratio': 0.1448868067763832}
 | Special_KNNCBF-ItemKNN_CBF_CF-P3alpha     | 0.0739867 | {'alpha': 0.6094679138906033, 'l1_ratio': 0.41715098578193194}
 | Special_KNNCBF-ItemKNN_CBF_CF-RP3beta     | 0.0736200 | {'alpha': 0.5369911284211629, 'l1_ratio': 0.45078644454282}
 | Special_KNNCBF-ItemKNN_CBF_CF-UserKNNCF   | 0.0729346 | {'alpha': 0.7020854096807992, 'l1_ratio': 0.20749665943340362}
 | Special_KNNCBF-ItemKNN_CBF_CF-Slim_BPR    | 0.0739889 | {'alpha': 0.7949204415356104, 'l1_ratio': 0.2705694962114903}
+| Special_KNNCBF-ItemKNN_CBF_CF-S-SLIM      | 0.0722529 | {'alpha': 0.8162670192627814, 'l1_ratio': 0.26730373918567046}
 | Special_KNNCBF-ItemKNNCF-P3alpha          | 0.0729078 | {'alpha': 0.4973334775913678, 'l1_ratio': 0.6790274919219236}
 | Special_KNNCBF-ItemKNNCF-RP3beta **!!!**  | 0.0724929 | {'alpha': 0.45931982254221104, 'l1_ratio': 0.552400663560699}
 | Special_KNNCBF-ItemKNNCF-UserKNNCF        | 0.0718252 | {'alpha': 0.5934342246244017, 'l1_ratio': 0.38793882442583466}
 | Special_KNNCBF-ItemKNNCF-Slim_BPR         | 0.0723958 | {'alpha': 0.8170119826252383, 'l1_ratio': 0.33586027250410305}
+| Special_KNNCBF-ItemKNNCF-S-SLIM           | 0.0719338 | {'alpha': 0.6383024036201149, 'l1_ratio': 0.5132363657816151}
 | Special_KNNCBF-RP3beta-P3alpha            | 0.0729609 | {'alpha': 0.4001101186128191, 'l1_ratio': 0.9989082076640393}
+| Special_KNNCBF-RP3beta-S-SLIM             | 0.0731503 | {'alpha': 0.7881737847053779, 'l1_ratio': 0.400772981812612}
 | Special_KNNCBF-UserKNNCF-P3alpha          | 0.0732810 | {'alpha': 0.627349023025726, 'l1_ratio': 0.5343474311262314}
 | Special_KNNCBF-UserKNNCF-RP3beta          | 0.0730215 | {'alpha': 0.5574853559798421, 'l1_ratio': 0.5221328226891215}
 | Special_KNNCBF-UserKNNCF-Slim_BPR         | 0.0726270 | {'alpha': 0.9033873534648698, 'l1_ratio': 0.30678626017844307}
+| Special_KNNCBF-UserKNNCF-S-SLIM           | 0.0724198 | {'alpha': 0.7362031685050584, 'l1_ratio': 0.3394266517525301}
+| Special_KNNCBF-P3alpha-S-SLIM             | 0.0734718 | {'alpha': 0.7989350513339316, 'l1_ratio': 0.4461703935735907}
+| Special_KNNCBF-Slim_BPR-S-SLIM            | 0.0735872 | {'alpha': 0.6194113348305054, 'l1_ratio': 0.6156379091138154}
 | ItemKNN_CBF_CF-ItemKNNCF-P3alpha          | 0.0700128 | {'alpha': 0.9849245373595942, 'l1_ratio': 0.9961549824044795}
 | ItemKNN_CBF_CF-ItemKNNCF-RP3beta          | 0.0700284 | {'alpha': 0.9960369080995459, 'l1_ratio': 0.9991666164394999}
 | ItemKNN_CBF_CF-ItemKNNCF-UserKNNCF        | 0.0700190 | {'alpha': 0.9978504378244369, 'l1_ratio': 0.9989504324961238}
 | ItemKNN_CBF_CF-...                        |     =     | all the same with config almost 1,1
-
 
 
 ---
