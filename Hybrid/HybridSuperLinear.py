@@ -25,7 +25,7 @@ class HybridSuperLinear(BaseItemSimilarityMatrixRecommender):
     RECOMMENDER_NAME = "HybridSuperLinear"
 
     # set the seed equal to the one of the parameter search!!!!
-    def __init__(self, URM_train, ICM_train, list_rec = None, verbose=True, seed=1205):
+    def __init__(self, URM_train, ICM_train, list_rec, seed=None, fold=None, verbose=True):
         super(HybridSuperLinear, self).__init__(URM_train, verbose = verbose)
         self.URM_train = URM_train
         self.ICM_train = ICM_train
@@ -75,29 +75,29 @@ class HybridSuperLinear(BaseItemSimilarityMatrixRecommender):
         except:
             self.__rec3 = self.__rec3_class(URM_train, verbose=False)
         try:
-            self.__rec1 = self.__rec4_class(URM_train, ICM_train, verbose = False)
+            self.__rec4 = self.__rec4_class(URM_train, ICM_train, verbose = False)
         except:
-            self.__rec1 = self.__rec4_class(URM_train, verbose=False)
+            self.__rec4 = self.__rec4_class(URM_train, verbose=False)
         try:
-            self.__rec2 = self.__rec5_class(URM_train, ICM_train, verbose = False)
+            self.__rec5 = self.__rec5_class(URM_train, ICM_train, verbose = False)
         except:
-            self.__rec2 = self.__rec5_class(URM_train, verbose=False)
+            self.__rec5 = self.__rec5_class(URM_train, verbose=False)
         try:
-            self.__rec3 = self.__rec6_class(URM_train, ICM_train, verbose = False)
+            self.__rec6 = self.__rec6_class(URM_train, ICM_train, verbose = False)
         except:
-            self.__rec3 = self.__rec6_class(URM_train, verbose=False)
+            self.__rec6 = self.__rec6_class(URM_train, verbose=False)
         try:
-            self.__rec1 = self.__rec7_class(URM_train, ICM_train, verbose = False)
+            self.__rec7 = self.__rec7_class(URM_train, ICM_train, verbose = False)
         except:
-            self.__rec1 = self.__rec7_class(URM_train, verbose=False)
+            self.__rec7 = self.__rec7_class(URM_train, verbose=False)
         try:
-            self.__rec2 = self.__rec8_class(URM_train, ICM_train, verbose = False)
+            self.__rec8 = self.__rec8_class(URM_train, ICM_train, verbose = False)
         except:
-            self.__rec2 = self.__rec8_class(URM_train, verbose=False)
+            self.__rec8 = self.__rec8_class(URM_train, verbose=False)
         try:
-            self.__rec3 = self.__rec9_class(URM_train, ICM_train, verbose = False)
+            self.__rec9 = self.__rec9_class(URM_train, ICM_train, verbose = False)
         except:
-            self.__rec3 = self.__rec9_class(URM_train, verbose=False)
+            self.__rec9 = self.__rec9_class(URM_train, verbose=False)
 
         self.__a = self.__b = self.__c = self.__d = self.__e = self.__f = self.__g = self.__h = self.i = None
         self.seed=seed
@@ -106,85 +106,85 @@ class HybridSuperLinear(BaseItemSimilarityMatrixRecommender):
 
         #load the models if already trained for that particular seed and fold
         try:
-            self.__rec1.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec1.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec1.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec1.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
             print(f"{self.__rec1.RECOMMENDER_NAME} loaded. [seed={self.seed}, fold={self.fold}]")
         except:
             print(f"Fitting {self.__rec1.RECOMMENDER_NAME} ... [seed={self.seed}, fold={self.fold}]")
             self.__rec1.fit(**self.__rec1_keywargs)
             print(f"done.")
-            self.__rec1.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec1.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec1.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec1.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
 
         try:
-            self.__rec2.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec2.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec2.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec2.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
             print(f"{self.__rec2.RECOMMENDER_NAME} loaded. [seed={self.seed}, fold={self.fold}]")
         except:
             print(f"Fitting {self.__rec2.RECOMMENDER_NAME} ... [seed={self.seed}, fold={self.fold}]")
             self.__rec2.fit(**self.__rec2_keywargs)
             print(f"done.")
-            self.__rec2.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec2.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec2.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec2.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
 
         try:
-            self.__rec3.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec3.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec3.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec3.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
             print(f"{self.__rec3.RECOMMENDER_NAME} loaded. [seed={self.seed}, fold={self.fold}]")
         except:
             print(f"Fitting {self.__rec3.RECOMMENDER_NAME} ... [seed={self.seed}, fold={self.fold}]")
             self.__rec3.fit(**self.__rec3_keywargs)
             print(f"done.")
-            self.__rec3.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec3.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec3.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec3.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
 
         try:
-            self.__rec4.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec4.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec4.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec4.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
             print(f"{self.__rec4.RECOMMENDER_NAME} loaded. [seed={self.seed}, fold={self.fold}]")
         except:
             print(f"Fitting {self.__rec4.RECOMMENDER_NAME} ... [seed={self.seed}, fold={self.fold}]")
             self.__rec4.fit(**self.__rec4_keywargs)
             print(f"done.")
-            self.__rec4.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec4.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec4.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec4.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
 
         try:
-            self.__rec5.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec5.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec5.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec5.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
             print(f"{self.__rec5.RECOMMENDER_NAME} loaded. [seed={self.seed}, fold={self.fold}]")
         except:
             print(f"Fitting {self.__rec5.RECOMMENDER_NAME} ... [seed={self.seed}, fold={self.fold}]")
             self.__rec5.fit(**self.__rec5_keywargs)
             print(f"done.")
-            self.__rec5.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec5.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec5.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec5.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
 
         try:
-            self.__rec6.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec6.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec6.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec6.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
             print(f"{self.__rec6.RECOMMENDER_NAME} loaded. [seed={self.seed}, fold={self.fold}]")
         except:
             print(f"Fitting {self.__rec6.RECOMMENDER_NAME} ... [seed={self.seed}, fold={self.fold}]")
             self.__rec6.fit(**self.__rec6_keywargs)
             print(f"done.")
-            self.__rec6.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec6.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec6.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec6.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
 
         try:
-            self.__rec7.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec7.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec7.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec7.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
             print(f"{self.__rec7.RECOMMENDER_NAME} loaded. [seed={self.seed}, fold={self.fold}]")
         except:
             print(f"Fitting {self.__rec7.RECOMMENDER_NAME} ... [seed={self.seed}, fold={self.fold}]")
             self.__rec7.fit(**self.__rec7_keywargs)
             print(f"done.")
-            self.__rec7.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec7.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec7.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec7.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
 
         try:
-            self.__rec8.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec8.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec8.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec8.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
             print(f"{self.__rec8.RECOMMENDER_NAME} loaded. [seed={self.seed}, fold={self.fold}]")
         except:
             print(f"Fitting {self.__rec8.RECOMMENDER_NAME} ... [seed={self.seed}, fold={self.fold}]")
             self.__rec8.fit(**self.__rec8_keywargs)
             print(f"done.")
-            self.__rec8.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec8.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec8.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec8.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
 
         try:
-            self.__rec9.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec9.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec9.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec9.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
             print(f"{self.__rec9.RECOMMENDER_NAME} loaded. [seed={self.seed}, fold={self.fold}]")
         except:
             print(f"Fitting {self.__rec9.RECOMMENDER_NAME} ... [seed={self.seed}, fold={self.fold}]")
             self.__rec9.fit(**self.__rec9_keywargs)
             print(f"done.")
-            self.__rec9.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_test/{self.__rec9.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
+            self.__rec9.save_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{self.__rec9.RECOMMENDER_NAME}/', f'{str(self.seed)}_fold-{str(self.fold)}')
 
         if norm:
             params = [a, b, c, d, e, f, g, h, i]
