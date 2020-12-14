@@ -45,7 +45,7 @@ class UserWiseRecommenderCV(BaseRecommender):
             'icb': (ItemKNNCBFRecommender, {'topK': 164, 'shrink': 8, 'similarity': 'jaccard', 'normalize': True}),
             'icbsup': (SpecialItemKNNCBFRecommender, {'topK': 1000, 'shrink': 1000, 'similarity': 'cosine',
                                                       'normalize': True, 'feature_weighting': 'BM25'}),
-            'icbcf': (ItemKNN_CBF_CF, {'topK': 1000, 'shrink': 1000, 'similarity': 'asymmetric', 'normalize': True,
+            'icfcb': (ItemKNN_CBF_CF, {'topK': 1000, 'shrink': 1000, 'similarity': 'asymmetric', 'normalize': True,
                                        'asymmetric_alpha': 0.241892724784089, 'feature_weighting': 'TF-IDF',
                                        'icm_weight': 1.0}),
             'icf': (ItemKNNCFRecommender, {'topK': 1000, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True,
@@ -80,21 +80,19 @@ class UserWiseRecommenderCV(BaseRecommender):
                     s_rec1 = self.__recommenders_dict[rec_reference][0](self.URM_train, self.ICM_train, verbose=False)
                 except:
                     s_rec1 = self.__recommenders_dict[rec_reference][0](self.URM_train, verbose=False)
-
-                if not self.submission:
-                    try:
-                        s_rec1.load_model(f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{s_rec1.RECOMMENDER_NAME}/',
-                            f'{str(self.seed)}_fold-{str(self.fold)}')
-                        print(f"{s_rec1.RECOMMENDER_NAME} loaded. [seed={self.seed}, fold={self.fold}]")
-                    except:
-                        print(f"Fitting {s_rec1.RECOMMENDER_NAME} ... [seed={self.seed}, fold={self.fold}]")
-                        s_rec1.fit(**self.__recommenders_dict[rec_reference][1])
-                        print(f"done.")
-                        s_rec1.save_model(
-                            f'stored_recommenders/seed_{str(self.seed)}_hybrid_search/{s_rec1.RECOMMENDER_NAME}/',
-                            f'{str(self.seed)}_fold-{str(self.fold)}')
-                else:
+                folder = 'for_sub' if self.submission else 'hybrid_search'
+                filename = 'fors_sub' if self.submission else f'{str(self.seed)}_fold-{str(self.fold)}'
+                try:
+                    s_rec1.load_model(f'stored_recommenders/seed_{str(self.seed)}_{folder}/{s_rec1.RECOMMENDER_NAME}/',
+                            filename)
+                    print(f"{s_rec1.RECOMMENDER_NAME} loaded. [seed={self.seed}, fold={self.fold}]")
+                except:
+                    print(f"Fitting {s_rec1.RECOMMENDER_NAME} ... [seed={self.seed}, fold={self.fold}]")
                     s_rec1.fit(**self.__recommenders_dict[rec_reference][1])
+                    print(f"done.")
+                    s_rec1.save_model(
+                            f'stored_recommenders/seed_{str(self.seed)}_{folder}/{s_rec1.RECOMMENDER_NAME}/',
+                            filename)
 
                 self.__recommender_segmentation.append((f_range, s_rec))
 
