@@ -103,7 +103,7 @@ def print_res2(all_rec, type_, treshold, at=None):
 if __name__ == '__main__':
     folder = 'result_experiments_CV2/seed_1666/linear_v2'
     filename = 'HybridCombinationSearchCV_SearchBayesianSkopt-CV.txt'
-    constraint = ''
+    constraint = 'IALS'
     type_ = 'linear'
     treshold = 0.071
     sub_folders = list(os.walk(folder))[0][1]
@@ -120,4 +120,4 @@ if __name__ == '__main__':
         dict_['rec_name'] = sub_folder
         dict_['content'] = get_best_config(content)
         all_rec = append_sorted(all_rec, dict_)
-    print_res2(all_rec, type_, treshold)
+    print_res(all_rec, type_, treshold)
