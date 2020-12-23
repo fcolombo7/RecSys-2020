@@ -61,8 +61,58 @@ URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train
 | ItemKNN_CBF_CF-ItemKNNCF-RP3beta          | 0.0700284 | {'alpha': 0.9960369080995459, 'l1_ratio': 0.9991666164394999}
 | ItemKNN_CBF_CF-ItemKNNCF-UserKNNCF        | 0.0700190 | {'alpha': 0.9978504378244369, 'l1_ratio': 0.9989504324961238}
 | ItemKNN_CBF_CF-...                        |     =     | all the same with config almost 1,1
+---
+### Merged
+1# Special-ItemKNNCBFRec_ItemKNN_CBF_CF_Recommender_P3alphaRecommender - MAP: 0.0745544, config: {'alpha': 0.581116263967674, 'l1_ratio': 0.5598903069887389, 'topK': 1000, 'normalize': True} [Warning: Something went wrong]  
+2# ItemKNNCBFRecommender_ItemKNN_CBF_CF_Recommender_SLIM_BPR_Recommender - MAP: 0.0742951, config: {'alpha': 0.6829163194586242, 'l1_ratio': 0.386516642359119, 'topK': 1000, 'normalize': True}  
+3# Special-ItemKNNCBFRec_ItemKNN_CBF_CF_Recommender_RP3betaRecommender - MAP: 0.0741505, config: {'alpha': 0.7269115930024891, 'l1_ratio': 0.6051868432813969, 'topK': 807, 'normalize': False} [Warning: Something went wrong]  
+4# ItemKNNCBFRecommender_ItemKNN_CBF_CF_Recommender_P3alphaRecommender - MAP: 0.0739636, config: {'alpha': 0.7097149976708894, 'l1_ratio': 0.4253431147789698, 'topK': 683, 'normalize': True}  
+5# Special-ItemKNNCBFRec_P3alphaRecommender_S-SLIMElasticNet - MAP: 0.0738594, config: {'alpha': 0.6509731450181614, 'l1_ratio': 0.5325849264151943, 'topK': 736, 'normalize': True}  
+6# Special-ItemKNNCBFRec_RP3betaRecommender_S-SLIMElasticNet - MAP: 0.0736987, config: {'alpha': 0.16451383666897593, 'l1_ratio': 0.7280753668239933, 'topK': 622, 'normalize': False} [Warning: Something went wrong]  
+7# Special-ItemKNNCBFRec_SLIM_BPR_Recommender_S-SLIMElasticNet - MAP: 0.0736591, config: {'alpha': 0.535827782580078, 'l1_ratio': 0.42823755538774455, 'topK': 228, 'normalize': True} [Warning: Something went wrong]  
+8# Special-ItemKNNCBFRec_P3alphaRecommender_SLIM_BPR_Recommender - MAP: 0.0735553, config: {'alpha': 0.48791974774529073, 'l1_ratio': 0.5476114683349933, 'topK': 749, 'normalize': False}  
+9# Special-ItemKNNCBFRec_P3alphaRecommender_RP3betaRecommender - MAP: 0.0734625, config: {'alpha': 1.0, 'l1_ratio': 0.3749359476595637, 'topK': 1000, 'normalize': True}  
+10# Special-ItemKNNCBFRec_ItemKNNCFRecommender_RP3betaRecommender - MAP: 0.0733669, config: {'alpha': 0.5086347515387531, 'l1_ratio': 0.8318853016648462, 'topK': 1000, 'normalize': True}  
+11# Special-ItemKNNCBFRec_RP3betaRecommender_SLIM_BPR_Recommender - MAP: 0.0732861, config: {'alpha': 0.7702171365467229, 'l1_ratio': 0.4846943139192311, 'topK': 985, 'normalize': True}  
+12# Special-ItemKNNCBFRec_ItemKNNCFRecommender_P3alphaRecommender - MAP: 0.0732192, config: {'alpha': 0.5334947443510734, 'l1_ratio': 0.7670738264844964, 'topK': 984, 'normalize': True}  
+13# ItemKNNCBFRecommender_SLIM_BPR_Recommender_S-SLIMElasticNet - MAP: 0.0730986, config: {'alpha': 0.5191303017757435, 'l1_ratio': 0.5397979031860276, 'topK': 1000, 'normalize': True}  
+14# Special-ItemKNNCBFRec_ItemKNNCFRecommender_SLIM_BPR_Recommender - MAP: 0.0729029, config: {'alpha': 0.2956440034792403, 'l1_ratio': 0.29893177702984014, 'topK': 1000, 'normalize': False}  
+15# ItemKNNCBFRecommender_ItemKNN_CBF_CF_Recommender_RP3betaRecommender - MAP: 0.0728979, config: {'alpha': 0.5837741870266273, 'l1_ratio': 0.537759713449255, 'topK': 840, 'normalize': True} [Warning: Something went wrong]  
+16# ItemKNNCBFRecommender_ItemKNN_CBF_CF_Recommender_S-SLIMElasticNet - MAP: 0.0728358, config: {'alpha': 0.5349175218474181, 'l1_ratio': 0.2576251556087315, 'topK': 1000, 'normalize': False}  
+17# Special-ItemKNNCBFRec_ItemKNN_CBF_CF_Recommender_SLIM_BPR_Recommender - MAP: 0.0727538, config: {'alpha': 0.42057870266300357, 'l1_ratio': 0.09026142584874454, 'topK': 274, 'normalize': False} [Warning: Something went wrong]  
+18# ItemKNNCBFRecommender_P3alphaRecommender_S-SLIMElasticNet - MAP: 0.0724625, config: {'alpha': 0.5337201740049957, 'l1_ratio': 0.6238228001711947, 'topK': 1000, 'normalize': True}  
+19# ItemKNNCBFRecommender_ItemKNN_CBF_CF_Recommender_ItemKNNCFRecommender - MAP: 0.0722729, config: {'alpha': 0.8564169787002618, 'l1_ratio': 0.38051833534630997, 'topK': 349, 'normalize': True} [Warning: Something went wrong]  
+20# ItemKNNCBFRecommender_RP3betaRecommender_S-SLIMElasticNet - MAP: 0.0722307, config: {'alpha': 0.5214551035450364, 'l1_ratio': 0.6435085766039979, 'topK': 1000, 'normalize': True}  
+21# Special-ItemKNNCBFRec_ItemKNN_CBF_CF_Recommender_ItemKNNCFRecommender - MAP: 0.0721569, config: {'alpha': 0.8911893260873708, 'l1_ratio': 0.190809944835244, 'topK': 678, 'normalize': False}  
+22# Special-ItemKNNCBFRec_ItemKNNCFRecommender_S-SLIMElasticNet - MAP: 0.0720505, config: {'alpha': 0.17007254940564234, 'l1_ratio': 0.5199674749734902, 'topK': 268, 'normalize': False} [Warning: Something went wrong]  
+23# ItemKNNCBFRecommender_RP3betaRecommender_SLIM_BPR_Recommender - MAP: 0.071546, config: {'alpha': 0.6279733305260499, 'l1_ratio': 0.6112981510597016, 'topK': 1000, 'normalize': False}  
+24# ItemKNNCBFRecommender_RP3betaRecommender_P3alphaRecommender - MAP: 0.0715163, config: {'alpha': 0.930884826476267, 'l1_ratio': 0.6534945725958449, 'topK': 772, 'normalize': False}  
+25# ItemKNNCBFRecommender_P3alphaRecommender_RP3betaRecommender - MAP: 0.0714667, config: {'alpha': 0.5746538230434903, 'l1_ratio': 0.7233709611102526, 'topK': 904, 'normalize': True}  
+26# Special-ItemKNNCBFRec_ItemKNN_CBF_CF_Recommender_S-SLIMElasticNet - MAP: 0.0714248, config: {'alpha': 0.8096670993132076, 'l1_ratio': 0.4281911898108999, 'topK': 600, 'normalize': True} [Warning: Something went wrong]  
+27# ItemKNNCBFRecommender_ItemKNNCFRecommender_P3alphaRecommender - MAP: 0.0713999, config: {'alpha': 0.44923735666844766, 'l1_ratio': 0.9950962886988683, 'topK': 990, 'normalize': True}  
+28# ItemKNNCBFRecommender_ItemKNNCFRecommender_S-SLIMElasticNet - MAP: 0.0713684, config: {'alpha': 0.27657784163744875, 'l1_ratio': 0.9973921663552862, 'topK': 908, 'normalize': True}  
+29# ItemKNNCBFRecommender_P3alphaRecommender_SLIM_BPR_Recommender - MAP: 0.0712737, config: {'alpha': 0.7269115930024891, 'l1_ratio': 0.6051868432813969, 'topK': 807, 'normalize': False}  
+30# ItemKNNCBFRecommender_ItemKNNCFRecommender_RP3betaRecommender - MAP: 0.070888, config: {'alpha': 0.7269115930024891, 'l1_ratio': 0.6051868432813969, 'topK': 807, 'normalize': False}  
+31# ItemKNNCBFRecommender_ItemKNNCFRecommender_SLIM_BPR_Recommender - MAP: 0.0705374, config: {'alpha': 0.5042583966203221, 'l1_ratio': 0.7037893657857259, 'topK': 1000, 'normalize': True}  
+32# ItemKNN_CBF_CF_Recommender_RP3betaRecommender_SLIM_BPR_Recommender - MAP: 0.0703119, config: {'alpha': 0.9741959377492061, 'l1_ratio': 0.9989395299915962, 'topK': 252, 'normalize': True}  
+33# ItemKNN_CBF_CF_Recommender_ItemKNNCFRecommender_SLIM_BPR_Recommender - MAP: 0.0702275, config: {'alpha': 0.5069277158601145, 'l1_ratio': 0.9967975114154806, 'topK': 955, 'normalize': False}  
+34# ItemKNN_CBF_CF_Recommender_P3alphaRecommender_SLIM_BPR_Recommender - MAP: 0.0702018, config: {'alpha': 0.5255202792085023, 'l1_ratio': 0.998367608238815, 'topK': 985, 'normalize': False}  
+35# ItemKNN_CBF_CF_Recommender_P3alphaRecommender_RP3betaRecommender - MAP: 0.070197, config: {'alpha': 0.995326133224697, 'l1_ratio': 0.9924404941038281, 'topK': 696, 'normalize': True}  
+36# ItemKNN_CBF_CF_Recommender_ItemKNNCFRecommender_P3alphaRecommender - MAP: 0.0701128, config: {'alpha': 0.995326133224697, 'l1_ratio': 0.9924404941038281, 'topK': 696, 'normalize': True}  
+37# ItemKNN_CBF_CF_Recommender_ItemKNNCFRecommender_RP3betaRecommender - MAP: 0.0701008, config: {'alpha': 0.995326133224697, 'l1_ratio': 0.9924404941038281, 'topK': 696, 'normalize': True}  
+38# ItemKNN_CBF_CF_Recommender_P3alphaRecommender_S-SLIMElasticNet - MAP: 0.0700173, config: {'alpha': 0.9819592139429474, 'l1_ratio': 0.9953246801952857, 'topK': 933, 'normalize': True}  
+39# ItemKNN_CBF_CF_Recommender_RP3betaRecommender_S-SLIMElasticNet - MAP: 0.0700098, config: {'alpha': 1.0, 'l1_ratio': 1.0, 'topK': 1000, 'normalize': True} [Warning: Something went wrong]  
+40# P3alphaRecommender_SLIM_BPR_Recommender_S-SLIMElasticNet - MAP: 0.0638962, config: {'alpha': 0.14490976979778805, 'l1_ratio': 0.17319390752089917, 'topK': 833, 'normalize': True}  
+41# RP3betaRecommender_SLIM_BPR_Recommender_S-SLIMElasticNet - MAP: 0.0638957, config: {'alpha': 0.14490976979778805, 'l1_ratio': 0.17319390752089917, 'topK': 833, 'normalize': True}  
+42# P3alphaRecommender_RP3betaRecommender_S-SLIMElasticNet - MAP: 0.0637037, config: {'alpha': 0.048389292751105054, 'l1_ratio': 0.889125187859802, 'topK': 806, 'normalize': True}  
+43# ItemKNNCFRecommender_RP3betaRecommender_S-SLIMElasticNet - MAP: 0.0635137, config: {'alpha': 0.0, 'l1_ratio': 0.0, 'topK': 1000, 'normalize': True}  
+44# ItemKNNCFRecommender_P3alphaRecommender_S-SLIMElasticNet - MAP: 0.0635137, config: {'alpha': 0.0, 'l1_ratio': 0.0, 'topK': 1000, 'normalize': True}  
+45# ItemKNNCFRecommender_P3alphaRecommender_SLIM_BPR_Recommender - MAP: 0.059821, config: {'alpha': 0.8776590434902116, 'l1_ratio': 0.637114762945663, 'topK': 800, 'normalize': False}  
+46# ItemKNNCFRecommender_P3alphaRecommender_RP3betaRecommender - MAP: 0.0595282, config: {'alpha': 0.8776590434902116, 'l1_ratio': 0.637114762945663, 'topK': 800, 'normalize': False}  
+47# P3alphaRecommender_RP3betaRecommender_SLIM_BPR_Recommender - MAP: 0.0594736, config: {'alpha': 0.9398795406092607, 'l1_ratio': 0.8960220958040324, 'topK': 422, 'normalize': False}  
+48# ItemKNNCFRecommender_RP3betaRecommender_SLIM_BPR_Recommender - MAP: 0.0593801, config: {'alpha': 0.3076600427364327, 'l1_ratio': 0.724219938125719, 'topK': 902, 'normalize': False}  
 
-
+---
 ---
 #Cross-validation
 ```
