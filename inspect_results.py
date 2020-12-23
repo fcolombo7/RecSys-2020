@@ -44,10 +44,12 @@ def append_sorted(container, content):
     return container
 
 
-def print_res(all_rec, at=None):
+def print_res(all_rec, type_, treshold, at=None):
     size = len(all_rec) if at is None else at
     for i in range(size):
         rec=all_rec[i]
+        if treshold is not None and rec['content'][0]['results'] < treshold:
+            continue
         if not rec['content'][1]['errors']:
             print(f"{i+1}# {rec['rec_name']} - MAP: {rec['content'][0]['results']}"+", config: {"+f"{rec['content'][0]['config']}"+"}")
         else:
@@ -57,13 +59,59 @@ def print_res(all_rec, at=None):
                 print(f"{i+1}# {rec['rec_name']} [Warning: Something went wrong]")
 
 
+def convert_name(rec_name: str):
+    f_words = {
+        'SLIM_BPR_Recommender': 'SLIMBPRRecommender',
+        'ItemKNN_CBF_CF_Recommender': 'ItemKNNCBFCFRecommender'
+    }
+    dict_name = {
+        'Special-ItemKNNCBFRec': 'icbsup',
+        'ItemKNNCBFCFRecommender': 'icfcb',
+        'P3alphaRecommender': 'p3a',
+        'SLIMBPRRecommender': 'sbpr',
+        'S-SLIMElasticNet': 'sslim',
+        'ItemKNNCFRecommender': 'icf',
+        'RP3betaRecommender': 'rp3b',
+        'UserKNNCFRecommender': 'ucf',
+        'ItemKNNCBFRecommender': 'icb',
+        'IALSRecommender': 'ials',
+        'PureSVDRecommender': 'psvd',
+    }
+    for k in f_words.keys():
+        if k in rec_name:
+            rec_name = rec_name.replace(k, f_words[k])
+    names = rec_name.split('_')
+    final_str = ''
+    for rec in names:
+        final_str += dict_name[rec]+', '
+    return final_str[:-2]
+
+
+def print_res2(all_rec, type_, treshold, at=None):
+    size = len(all_rec) if at is None else at
+    for i in range(size):
+        rec = all_rec[i]
+        if treshold is not None and rec['content'][0]['results'] < treshold:
+            continue
+        str_ = convert_name(rec['rec_name'])
+        try:
+            print("('"+str_+"', '"+type_+"', ["+str_+"], {"+rec['content'][0]['config']+"}),")
+        except:
+            continue
+
+
 if __name__ == '__main__':
     folder = 'result_experiments_CV2/seed_1666/linear_v2'
     filename = 'HybridCombinationSearchCV_SearchBayesianSkopt-CV.txt'
+    constraint = ''
+    type_ = 'linear'
+    treshold = 0.071
     sub_folders = list(os.walk(folder))[0][1]
 
     all_rec = []
     for sub_folder in sub_folders:
+        if constraint not in sub_folder:
+            continue
         dict_ = {}
         path = os.path.join(folder, sub_folder, filename)
         with open(path) as f:
@@ -72,4 +120,4 @@ if __name__ == '__main__':
         dict_['rec_name'] = sub_folder
         dict_['content'] = get_best_config(content)
         all_rec = append_sorted(all_rec, dict_)
-    print_res(all_rec)
+    print_res2(all_rec, type_, treshold)
