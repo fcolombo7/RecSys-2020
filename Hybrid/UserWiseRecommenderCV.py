@@ -4,15 +4,21 @@ import numpy as np
 from Base.BaseSimilarityMatrixRecommender import BaseItemSimilarityMatrixRecommender
 from Base.DataIO import DataIO
 from Base.Recommender_utils import similarityMatrixTopK
+from GraphBased.P3alphaICM import P3alphaICM
 
 from GraphBased.P3alphaRecommender import P3alphaRecommender
+from GraphBased.RP3betaICM import RP3betaICM
 from GraphBased.RP3betaRecommender import RP3betaRecommender
-from Hybrid.HybridCombinationSearchCV import HybridCombinationSearchCV
+from Hybrid.HybridCombinationSearchCV import HybridCombinationSearchCV, HybridCombinationSearchCV2, \
+    HybridCombinationMergedSearchCV
 from KNN.ItemKNNCFRecommender import ItemKNNCFRecommender
+from KNN.ItemKNNICF import ItemKNNICF
 from KNN.ItemKNN_CBF_CF import ItemKNN_CBF_CF
 from KNN.SpecialItemKNNCBFRecommender import SpecialItemKNNCBFRecommender
 from KNN.UserKNNCFRecommender import UserKNNCFRecommender
 from KNN.ItemKNNCBFRecommender import ItemKNNCBFRecommender
+from MatrixFactorization.IALSRecommender import IALSRecommender
+from MatrixFactorization.PureSVDRecommender import PureSVDRecommender
 from SLIM_ElasticNet.SLIMElasticNetRecommender import SLIMElasticNetRecommender
 from SLIM_BPR.Cython.SLIM_BPR_Cython import SLIM_BPR_Cython
 from SLIM_ElasticNet.SSLIM_ElasticNet import SSLIMElasticNet
@@ -26,7 +32,8 @@ class UserWiseRecommenderCV(BaseRecommender):
         """
         :params rec_range_list: lista contenente tuple formate nel seguente modo: pos0 = (start_range, end_range),
         pos1 = ['sigla_rec1', 'sigla_rec2', 'sigla_rec3'] #lista di sigle, oppure singola sigla 'sigla_rec'
-        pos2 = **params
+        pos2 = type
+        pos3 = **params
         """
         assert (seed is not None and fold is not None) or submission is True
         super(UserWiseRecommenderCV, self).__init__(URM_train, verbose=verbose)
@@ -35,8 +42,8 @@ class UserWiseRecommenderCV(BaseRecommender):
         self.fold = fold
         self.submission = submission
 
-        self.URM_train=URM_train
-        self.ICM_train=ICM_train
+        self.URM_train = URM_train
+        self.ICM_train = ICM_train
         self.rec_range_list = rec_range_list
         if name is not None:
             self.RECOMMENDER_NAME = name
@@ -52,25 +59,41 @@ class UserWiseRecommenderCV(BaseRecommender):
                                            'feature_weighting': 'TF-IDF'}),
             'ucf': (UserKNNCFRecommender, {'topK': 163, 'shrink': 846, 'similarity': 'cosine', 'normalize': True,
                                            'feature_weighting': 'TF-IDF'}),
-            'p3a': (RP3betaRecommender, {'topK': 926, 'alpha': 0.4300109351916609, 'beta': 0.01807360750913967,
-                                         'normalize_similarity': False}),
-            'rp3b': (P3alphaRecommender, {'topK': 575, 'alpha': 0.48009885897470206, 'normalize_similarity': False}),
+            'rp3b': (RP3betaRecommender, {'topK': 926, 'alpha': 0.4300109351916609, 'beta': 0.01807360750913967,
+                                          'normalize_similarity': False}),
+            'p3a': (P3alphaRecommender, {'topK': 575, 'alpha': 0.48009885897470206, 'normalize_similarity': False}),
             'sbpr': (SLIM_BPR_Cython,
                      {'topK': 1000, 'epochs': 130, 'symmetric': False, 'sgd_mode': 'adam', 'lambda_i': 1e-05,
                       'lambda_j': 1e-05, 'learning_rate': 0.0001}),
             'sslim': (SSLIMElasticNet, {'beta': 0.567288665094892, 'topK': 1000, 'l1_ratio': 1e-05, 'alpha': 0.001}),
+            'ials': (IALSRecommender,
+                     {'num_factors': 126, 'epochs': 15, 'confidence_scaling': 'log', 'alpha': 12.147774561179066,
+                      'epsilon': 0.011140000925581263, 'reg': 0.00039864851116724637}),
+            'psvd': (PureSVDRecommender, {'num_factors': 350}),
+            'icmrp3b': (RP3betaICM, {'topK': 966, 'alpha': 0.37390944791085495, 'beta': 0.22865236967996966,
+                                     'normalize_similarity': False, 'icm_weight': 0.17241502697287484}),
+            'icmp3a': (P3alphaICM,
+                       {'topK': 1000, 'alpha': 0.44245956902357186, 'normalize_similarity': False, 'icm_weight': 0.0}),
+            'icmicf': (ItemKNNICF, {'topK': 938, 'shrink': 985, 'similarity': 'asymmetric', 'normalize': True,
+                                    'icm_weight': 0.9755193235505681, 'asymmetric_alpha': 0.0519842599512146,
+                                    'feature_weighting': 'TF-IDF'})
         }
 
         self.__recommender_segmentation = []
 
     def fit(self):
-        for f_range, rec_reference, params in self.rec_range_list:
-            if isinstance(rec_reference, list):
-                print(f"> Range {str(f_range)} [Hybrid]")
+        for f_range, rec_reference, type_, params in self.rec_range_list:
+            if type_ == 'linear' or type_ == 'merged':
+                print(f"> Range {str(f_range)} [Hybrid {type_}]")
                 temp_list = []
                 for rec in rec_reference:
                     temp_list.append(self.__recommenders_dict[rec])
-                h_rec = HybridCombinationSearchCV(self.URM_train, self.ICM_train, temp_list, seed=self.seed, fold=self.fold, submission=self.submission, verbose=False)
+                if type_=='linear':
+                    h_rec = HybridCombinationSearchCV2(self.URM_train, self.ICM_train, temp_list, seed=self.seed,
+                                                       fold=self.fold, submission=self.submission, verbose=False)
+                else:
+                    h_rec = HybridCombinationMergedSearchCV(self.URM_train, self.ICM_train, temp_list, seed=self.seed,
+                                                       fold=self.fold, submission=self.submission, verbose=False)
                 h_rec.fit(**params)
                 self.__recommender_segmentation.append((f_range, h_rec))
             else:
@@ -84,15 +107,15 @@ class UserWiseRecommenderCV(BaseRecommender):
                 filename = 'fors_sub' if self.submission else f'{str(self.seed)}_fold-{str(self.fold)}'
                 try:
                     s_rec1.load_model(f'stored_recommenders/seed_{str(self.seed)}_{folder}/{s_rec1.RECOMMENDER_NAME}/',
-                            filename)
+                                      filename)
                     print(f"{s_rec1.RECOMMENDER_NAME} loaded. [seed={self.seed}, fold={self.fold}]")
                 except:
                     print(f"Fitting {s_rec1.RECOMMENDER_NAME} ... [seed={self.seed}, fold={self.fold}]")
                     s_rec1.fit(**self.__recommenders_dict[rec_reference][1])
                     print(f"done.")
                     s_rec1.save_model(
-                            f'stored_recommenders/seed_{str(self.seed)}_{folder}/{s_rec1.RECOMMENDER_NAME}/',
-                            filename)
+                        f'stored_recommenders/seed_{str(self.seed)}_{folder}/{s_rec1.RECOMMENDER_NAME}/',
+                        filename)
 
                 self.__recommender_segmentation.append((f_range, s_rec))
 
@@ -141,7 +164,6 @@ class UserWiseRecommenderCV(BaseRecommender):
                 return recommender
         raise ValueError(
             f"{self.RECOMMENDER_NAME}: there is no recommender for users with profile length equal to {user_profile_length}.")
-
 """
 class HiddenLinearRecommender(BaseItemSimilarityMatrixRecommender):
     RECOMMENDER_NAME = "HiddenRecommender"
