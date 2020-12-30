@@ -9,15 +9,16 @@ URM_train, URM_test = split_train_in_two_percentage_global_sample(URM_all, train
 | Algorithm | MAP w/ **CV** | optimal parameters |
 | ------ | ------| ------|
 | ItemKNNCBF            | 0.0294841 | {'topK': 164, 'shrink': 8, 'similarity': 'jaccard', 'normalize': True}
-| ItemKNNCBF_Special    | 0.0318313 | {'topK': 1000, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'BM25'}
-| ItemKNN_CBF_CF        | 0.0566790 | {'topK': 1000, 'shrink': 1000, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.241892724784089, 'feature_weighting': 'TF-IDF', 'icm_weight': 1.0}
-| ItemKNNCF             |  0.0441588 | {'topK': 1000, 'shrink': 1000, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'TF-IDF'}
+| ItemKNNCBF_Special    | 0.0318794 | {'topK': 1952, 'shrink': 1902, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.523138057355702, 'feature_weighting': 'BM25'}
+| ItemKNN_CBF_CF        | 0.0568250 | {'topK': 1279, 'shrink': 519, 'similarity': 'asymmetric', 'normalize': True, 'icm_weight': 1.0015968978268481, 'asymmetric_alpha': 0.09935158530071611, 'feature_weighting': 'TF-IDF'}
+| ItemKNNCF             |  0.0452230 | {'topK': 1704, 'shrink': 1217, 'similarity': 'asymmetric', 'normalize': True, 'asymmetric_alpha': 0.33244329240913123, 'feature_weighting': 'TF-IDF'}
 | UserKNNCF             | 0.0442522 | {'topK': 163, 'shrink': 846, 'similarity': 'cosine', 'normalize': True, 'feature_weighting': 'TF-IDF'}
 | RP3Beta               | 0.0469976 | {'topK': 926, 'alpha': 0.4300109351916609, 'beta': 0.01807360750913967, 'normalize_similarity': False}
 | P3alpha               | 0.0462770 | {'topK': 575, 'alpha': 0.48009885897470206, 'normalize_similarity': False}
 | SLIM_BPR              | 0.0408258 | {'topK': 1000, 'epochs': 1500, 'symmetric': False, 'sgd_mode': 'adam', 'lambda_i': 1e-05, 'lambda_j': 1e-05, 'learning_rate': 0.0001, 'epochs0': 100, 'epochs1': 160, 'epochs2': 175, 'epochs3': 90, 'epochs4': 60}
 | S-SLIM                | 0.0509633 | {'beta': 0.567288665094892, 'topK': 1000, 'l1_ratio': 1e-05, 'alpha': 0.001} - *not finished*
 | PureSVD               | 0.0229563 | {'num_factors': 350}
+| IALS                  | 0.0449636 | {'num_factors': 126, 'confidence_scaling': 'log', 'alpha': 12.147774561179066, 'epsilon': 0.011140000925581263, 'reg': 0.00039864851116724637, 'epochs0': 10, 'epochs1': 30, 'epochs2': 20, 'epochs3': 15, 'epochs4': 10}
 
 ## hybrid
 
